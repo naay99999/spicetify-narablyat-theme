@@ -1,0 +1,13 @@
+{
+  "name": "narablyat",
+  "description": "i's m theme",
+  "readme": "README.md",
+  "usercss": "user.css",
+  "schemes": "color.ini",
+  "include": ["theme.js"],
+  "authors": [
+    {
+      "name": "narablyat"
+    }
+  ]
+}
