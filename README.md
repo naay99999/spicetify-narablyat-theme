@@ -4,11 +4,7 @@ A Spotify theme for Spicetify with a modern Liquid Glass design and soft platinu
 
 ## Main Features
 
-- 🎨 **Liquid Glass Design** - Modern glass effect with blur and soft shadows
-- ✨ **Smooth Animations** - Nice movements when you interact with buttons
-- 🎯 **Better Search Modal** - Special search box with glass effects and animations
-- 🎵 **Custom Now Playing Bar** - Music controls with soft shadows and hover effects
-- 🌈 **Easy on the Eyes** - Platinum color (#e5e4e2) with Spotify green as accent
+- Nothing ;)
 
 ## How to Install
 
@@ -29,7 +25,7 @@ You need to install [Spicetify](https://spicetify.app/) first.
 2. **Turn on the theme:**
    ```bash
    spicetify config current_theme narablyat
-   spicetify config color_scheme suudLor
+   spicetify config color_scheme suudLorDark
    spicetify apply
    ```
 
@@ -41,6 +37,7 @@ You need to install [Spicetify](https://spicetify.app/) first.
 
 Edit the `color.ini` file to change colors:
 
+For example
 ```ini
 [suudLor]
 main               = e5e4e2    ; main background color
@@ -157,7 +154,7 @@ spicetify restore backup apply
 
 ## License
 
-This theme was made by narablyat for personal use.
+Free use jaa :3
 
 ## Credits
 
