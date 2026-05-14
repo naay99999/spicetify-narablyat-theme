@@ -384,7 +384,7 @@
   --ui-subtext: var(--spice-subtext, var(--color-subtext));
   --ui-accent: var(--spice-accent, var(--color-accent));
   --ui-accent-hover: var(--spice-button-active, var(--color-accent-hover));
-  --ui-contour: var(--spice-contour, #e8e8e8);
+  --ui-contour: var(--spice-contour, var(--color-border));
 }
 
 /* ---- Buttons (Only) ---- */
