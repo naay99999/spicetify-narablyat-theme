@@ -368,7 +368,7 @@
 /* Playing Bar */
 .Root__now-playing-bar {
   box-shadow: 0 -16px 16px rgba(0, 0, 0, 0.05);
-  backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%) !important;
   transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
