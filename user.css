@@ -1,21 +1,21 @@
 :root {
   /* ---- Color Palette ---- */
-  --color-bg: #e5e4e2;
-  /*  platinum */
-  --color-surface: #eae9e7;
-  /* slightly elevated */
-  --color-border: #e5e5e5;
-  --color-text: #1a1a1a;
-  --color-subtext: #6d6d6d;
-  --color-accent: #1db954;
-  --color-accent-hover: #1ed760;
-  --color-disabled: #cccccc;
-  --color-card-shadow: rgba(0, 0, 0, 0.05);
+  --color-bg: #f5f5f7;
+  --color-surface: #ffffff;
+  --color-border: rgba(0, 0, 0, 0.08);
+  --color-text: #1d1d1f;
+  --color-subtext: #6e6e73;
+  --color-accent: #00e676;
+  --color-accent-hover: #00ff87;
+  --color-disabled: #d1d1d6;
+  --color-card-shadow: rgba(0, 0, 0, 0.08);
 
   /* ---- Layout ---- */
-  --radius-md: 10px;
-  --radius-sm: 6px;
-  --radius-lg: 16px;
+  --radius-xs: 8px;
+  --radius-sm: 12px;
+  --radius-md: 20px;
+  --radius-lg: 28px;
+  --radius-xl: 32px;
 
   /* ---- Transitions ---- */
   --transition-fast: 0.15s ease;
@@ -25,12 +25,12 @@
 
 /* Search Bar – refined, targeted overrides */
 :root {
-  --search-bg: rgba(229, 228, 226, 0.72);
-  --search-bg-hover: rgba(229, 228, 226, 0.86);
-  --search-bg-focus: #e5e4e2;
+  --search-bg: rgba(255, 255, 255, 0.52);
+  --search-bg-hover: rgba(255, 255, 255, 0.66);
+  --search-bg-focus: #ffffff;
   --search-border: rgba(0, 0, 0, 0.08);
-  --search-border-hover: rgba(29, 185, 84, 0.35);
-  --search-ring: rgba(29, 185, 84, 0.28);
+  --search-border-hover: rgba(0, 230, 118, 0.35);
+  --search-ring: rgba(0, 230, 118, 0.28);
   --search-text: var(--color-text);
   --search-subtext: var(--color-subtext);
   --search-icon: var(--color-subtext);
@@ -39,15 +39,15 @@
 
 /* ---- Liquid Glass Modal (Search) ---- */
 :root {
-  --glass-overlay-tint: rgba(229, 228, 226, 0.35);
-  --glass-surface: rgba(229, 228, 226, 0.68);
-  --glass-border: rgba(255, 255, 255, 0.35);
-  --glass-highlight: rgba(255, 255, 255, 0.35);
-  --glass-shadow: rgba(20, 20, 20, 0.18);
-  --glass-ink: rgba(18, 18, 18, 0.70);
-  --glass-ink-hover: rgba(18, 18, 18, 0.78);
+  --glass-overlay-tint: rgba(255, 255, 255, 0.35);
+  --glass-surface: rgba(255, 255, 255, 0.72);
+  --glass-border: rgba(255, 255, 255, 0.40);
+  --glass-highlight: rgba(255, 255, 255, 0.60);
+  --glass-shadow: rgba(0, 0, 0, 0.08);
+  --glass-ink: rgba(28, 28, 30, 0.72);
+  --glass-ink-hover: rgba(28, 28, 30, 0.86);
   --glass-ink-border: rgba(255, 255, 255, 0.14);
-  --glass-ink-ring: rgba(29, 185, 84, 0.22);
+  --glass-ink-ring: rgba(0, 230, 118, 0.28);
 }
 
 /* Overlay blur and tint when search modal is open */
