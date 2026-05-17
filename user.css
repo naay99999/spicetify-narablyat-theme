@@ -602,10 +602,45 @@ span.SrfZ87xJMiJ7OYEB4Ziz {
 }
 
 /* ── Playlist / Album Action Bar ───────────────── */
+.main-topBar-background {
+  opacity: 0 !important;
+  --background-base: transparent !important;
+  background: transparent !important;
+}
+
 .playlist-playlist-actionBarBackground-background {
   display: none !important;
 }
 
 .main-entityHeader-backgroundColor {
   display: none !important;
+}
+
+/* ---- Ambient Background System ---- */
+body {
+  background: linear-gradient(160deg, #f5f3fa 0%, #edf5f1 100%) !important;
+}
+
+.spice-ambient-blob-1 {
+  position: fixed;
+  top: -80px;
+  left: -80px;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(180, 155, 230, 0.35), transparent 70%);
+  filter: blur(80px);
+  z-index: -1;
+  pointer-events: none;
+}
+
+.spice-ambient-blob-2 {
+  position: fixed;
+  bottom: -60px;
+  right: -60px;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(30, 215, 96, 0.22), transparent 70%);
+  filter: blur(60px);
+  z-index: -1;
+  pointer-events: none;
 }

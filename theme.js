@@ -36,3 +36,22 @@
   mo.observe(document.documentElement || document.body, { childList: true, subtree: true });
   applyGlassEnhancements();
 })();
+
+(function () {
+  const injectAmbientBlobs = () => {
+    if (!document.querySelector('.spice-ambient-blob-1')) {
+      const b1 = document.createElement('div');
+      b1.className = 'spice-ambient-blob-1';
+      document.body.appendChild(b1);
+    }
+    if (!document.querySelector('.spice-ambient-blob-2')) {
+      const b2 = document.createElement('div');
+      b2.className = 'spice-ambient-blob-2';
+      document.body.appendChild(b2);
+    }
+  };
+
+  const mo = new MutationObserver(injectAmbientBlobs);
+  mo.observe(document.body, { childList: true });
+  injectAmbientBlobs();
+})();
