@@ -435,9 +435,9 @@
   --color-accent-hover: #1fdf64 !important;
   --color-bg: var(--spice-main, #fafafa) !important;
   --essential-bright-accent: #1ed760 !important;
-  --background-base: var(--spice-main, #f5f5f7) !important;
+  --background-base: color-mix(in srgb, var(--spice-main, #f5f5f7) 65%, transparent) !important;
   --background-highlight: var(--spice-selected-row, #e5e5ea) !important;
-  --background-elevated-base: var(--spice-card, #ffffff) !important;
+  --background-elevated-base: color-mix(in srgb, var(--spice-card, #ffffff) 65%, transparent) !important;
   --shadow-base: none !important;
   --shadow-elevated: 0 8px 24px rgba(0, 0, 0, 0.06) !important;
 }
@@ -588,6 +588,25 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
   pointer-events: none;
 }
 
+/* ---- Right Sidebar Panel ---- */
+[data-testid="right-sidebar"] {
+  position: relative;
+  background: color-mix(in srgb, var(--spice-card, #ffffff) 68%, transparent) !important;
+  border-left: 1px solid var(--glass-border) !important;
+  backdrop-filter: blur(18px) saturate(155%) !important;
+}
+
+[data-testid="right-sidebar"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--noise-svg);
+  background-size: 180px 180px;
+  opacity: 0.038;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
 .main-navBar-navBar [data-encore-id="listItem"],
 .main-navBar-navBar .main-navBar-navBarItem {
   border-radius: var(--radius-sm) !important;
@@ -636,6 +655,26 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
 .main-home-filterChipsSection {
   --background-base: transparent !important;
 }
+
+.main-home-filterChipsSection [role="tab"],
+.main-home-filterChipsSection button[class*="chip"],
+.main-home-filterChipsSection [class*="filterChip"] {
+  background: color-mix(in srgb, var(--spice-card, #ffffff) 62%, transparent) !important;
+  border: 1px solid var(--glass-border) !important;
+  border-radius: 9999px !important;
+  backdrop-filter: blur(12px) saturate(140%) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), inset 0 1px 0 var(--glass-highlight) !important;
+  transition: background var(--transition-fast), box-shadow var(--transition-fast) !important;
+}
+
+.main-home-filterChipsSection [role="tab"][aria-selected="true"],
+.main-home-filterChipsSection button[class*="chip"][aria-selected="true"],
+.main-home-filterChipsSection [class*="filterChip"][aria-selected="true"] {
+  background: rgba(30, 215, 96, 0.14) !important;
+  border-color: rgba(30, 215, 96, 0.40) !important;
+  box-shadow: 0 2px 8px rgba(30, 215, 96, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
+}
+
 /* hashed: update if filter chips area changes — hides unknown overlay near home filter chips */
 span.SrfZ87xJMiJ7OYEB4Ziz {
   display: none !important;
@@ -704,13 +743,15 @@ span.SrfZ87xJMiJ7OYEB4Ziz {
 body {
   background: linear-gradient(
     160deg,
-    color-mix(in srgb, var(--spice-main, var(--color-bg)) 92%, rgba(180, 155, 230, 0.5) 8%) 0%,
-    color-mix(in srgb, var(--spice-main, var(--color-bg)) 92%, rgba(30, 215, 96, 0.5) 8%) 100%
+    #f0edf8 0%,
+    #eaf5ef 100%
   ) !important;
 }
 
 .Root__top-container {
+  position: relative;
   background: transparent !important;
+  z-index: 1;
 }
 
 .spice-ambient-blob-1 {
@@ -719,9 +760,9 @@ body {
   left: -80px;
   width: 500px;
   height: 500px;
-  background: radial-gradient(circle, rgba(180, 155, 230, 0.35), transparent 70%);
+  background: radial-gradient(circle, rgba(180, 155, 230, 0.55), transparent 70%);
   filter: blur(80px);
-  z-index: -1;
+  z-index: 0;
   pointer-events: none;
 }
 
@@ -731,8 +772,8 @@ body {
   right: -60px;
   width: 400px;
   height: 400px;
-  background: radial-gradient(circle, rgba(30, 215, 96, 0.22), transparent 70%);
+  background: radial-gradient(circle, rgba(30, 215, 96, 0.40), transparent 70%);
   filter: blur(60px);
-  z-index: -1;
+  z-index: 0;
   pointer-events: none;
 }
