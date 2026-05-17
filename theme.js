@@ -49,15 +49,7 @@
       b2.className = 'spice-ambient-blob-2';
       document.body.appendChild(b2);
     }
-    if (
-      document.querySelector('.spice-ambient-blob-1') &&
-      document.querySelector('.spice-ambient-blob-2')
-    ) {
-      mo.disconnect();
-    }
   };
 
-  const mo = new MutationObserver(injectAmbientBlobs);
-  mo.observe(document.body, { childList: true });
   injectAmbientBlobs();
 })();

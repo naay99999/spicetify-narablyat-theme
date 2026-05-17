@@ -372,7 +372,7 @@
     0 12px 40px rgba(0, 0, 0, 0.13),
     inset 0 1px 0 rgba(255, 255, 255, 0.90) !important;
   backdrop-filter: blur(30px) saturate(200%) !important;
-  transition: background 0.3s ease, box-shadow 0.3s ease;
+  transition: background var(--transition-medium), box-shadow var(--transition-medium) !important;
   overflow: hidden !important;
   z-index: 100 !important;
 }
@@ -393,6 +393,9 @@
   z-index: 0;
 }
 
+/* Note: topbar (.spice-glass-topbar) and dialog (.spice-glass-dialog) intentionally
+   have no noise ::after — both ::before and ::after are already used for their
+   highlight and accent blob effects, leaving no pseudo-element slot. */
 .Root__now-playing-bar::after {
   content: "";
   position: absolute;
@@ -577,7 +580,7 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
   content: "";
   position: absolute;
   inset: 0;
-  border-radius: inherit;
+  border-radius: 0;
   background-image: var(--noise-svg);
   background-size: 180px 180px;
   opacity: 0.038;
@@ -701,8 +704,8 @@ span.SrfZ87xJMiJ7OYEB4Ziz {
 body {
   background: linear-gradient(
     160deg,
-    color-mix(in srgb, var(--spice-main, #f5f3fa) 92%, rgba(180, 155, 230, 0.5) 8%) 0%,
-    color-mix(in srgb, var(--spice-main, #edf5f1) 92%, rgba(30, 215, 96, 0.5) 8%) 100%
+    color-mix(in srgb, var(--spice-main, var(--color-bg)) 92%, rgba(180, 155, 230, 0.5) 8%) 0%,
+    color-mix(in srgb, var(--spice-main, var(--color-bg)) 92%, rgba(30, 215, 96, 0.5) 8%) 100%
   ) !important;
 }
 
