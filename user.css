@@ -618,7 +618,15 @@ span.SrfZ87xJMiJ7OYEB4Ziz {
 
 /* ---- Ambient Background System ---- */
 body {
-  background: linear-gradient(160deg, #f5f3fa 0%, #edf5f1 100%) !important;
+  background: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--spice-main, #f5f3fa) 92%, rgba(180, 155, 230, 0.5) 8%) 0%,
+    color-mix(in srgb, var(--spice-main, #edf5f1) 92%, rgba(30, 215, 96, 0.5) 8%) 100%
+  ) !important;
+}
+
+.Root__top-container {
+  background: transparent !important;
 }
 
 .spice-ambient-blob-1 {
