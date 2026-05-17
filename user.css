@@ -600,3 +600,12 @@ span.SrfZ87xJMiJ7OYEB4Ziz {
   border-color: var(--glass-border) !important;
   margin: 4px 0 !important;
 }
+
+/* ── Playlist / Album Action Bar ───────────────── */
+.playlist-playlist-actionBarBackground-background {
+  display: none !important;
+}
+
+.main-entityHeader-backgroundColor {
+  display: none !important;
+}
