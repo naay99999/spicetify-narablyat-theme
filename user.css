@@ -25,13 +25,13 @@
 
 /* Search Bar – refined, targeted overrides */
 :root {
-  --search-bg: rgba(255, 255, 255, 0.52);
-  --search-bg-hover: rgba(255, 255, 255, 0.66);
-  --search-bg-focus: #ffffff;
-  --search-border: rgba(0, 0, 0, 0.08);
+  --search-bg: color-mix(in srgb, var(--spice-card, #ffffff) 52%, transparent);
+  --search-bg-hover: color-mix(in srgb, var(--spice-card, #ffffff) 66%, transparent);
+  --search-bg-focus: var(--spice-card, #ffffff);
+  --search-border: var(--spice-contour, rgba(0, 0, 0, 0.08));
   --search-border-hover: rgba(0, 230, 118, 0.35);
   --search-ring: rgba(0, 230, 118, 0.28);
-  --search-text: var(--color-text);
+  --search-text: var(--spice-text, var(--color-text));
   --search-subtext: var(--color-subtext);
   --search-icon: var(--color-subtext);
   --search-icon-hover: var(--color-accent);
@@ -39,11 +39,11 @@
 
 /* ---- Liquid Glass Modal (Search) ---- */
 :root {
-  --glass-overlay-tint: rgba(255, 255, 255, 0.35);
-  --glass-surface: rgba(255, 255, 255, 0.72);
+  --glass-overlay-tint: color-mix(in srgb, var(--spice-card, #ffffff) 35%, transparent);
+  --glass-surface: color-mix(in srgb, var(--spice-card, #ffffff) 72%, transparent);
   --glass-border: rgba(255, 255, 255, 0.40);
   --glass-highlight: rgba(255, 255, 255, 0.60);
-  --glass-shadow: rgba(0, 0, 0, 0.08);
+  --glass-shadow: rgba(0, 0, 0, 0.10);
   --glass-ink: rgba(28, 28, 30, 0.72);
   --glass-ink-hover: rgba(28, 28, 30, 0.86);
   --glass-ink-border: rgba(255, 255, 255, 0.14);
@@ -127,8 +127,7 @@
   fill: var(--color-accent) !important;
 }
 
-.spice-glass-topbar .x-searchInput-searchInputClearButton,
-.spice-glass-topbar .Ckze8wMFNiDXk_f1IqjJ .Button-sc-1dqy6lx-0 {
+.spice-glass-topbar .x-searchInput-searchInputClearButton {
   background: rgba(0, 0, 0, 0.04) !important;
   border: 1px solid rgba(255, 255, 255, 0.18) !important;
   border-radius: 9999px !important;
@@ -293,11 +292,7 @@
   opacity: 0.8 !important;
 }
 
-/* Overlay placeholder (Spotify uses a separate node) */
-.main-globalNav-searchInputContainer .al8f6ds34QJ4LZ74vbVP,
-.main-globalNav-searchInputContainer .vq_8tRO1ZF7Fy_ThSKSv {
-  color: var(--search-subtext) !important;
-}
+/* Overlay placeholder: handled by ::placeholder pseudo-element above */
 
 /* Leading search icon */
 .main-globalNav-searchInputContainer .x-searchInput-searchInputSearchIcon,
@@ -316,8 +311,7 @@
 }
 
 /* Trailing buttons: clear + browse */
-.main-globalNav-searchInputContainer .x-searchInput-searchInputClearButton,
-.main-globalNav-searchInputContainer .Ckze8wMFNiDXk_f1IqjJ .Button-sc-1dqy6lx-0 {
+.main-globalNav-searchInputContainer .x-searchInput-searchInputClearButton {
   background: transparent !important;
   border-radius: 9999px !important;
   color: var(--search-icon) !important;
@@ -326,8 +320,7 @@
 
 /* Hover removed */
 
-.main-globalNav-searchInputContainer .x-searchInput-searchInputClearButton svg,
-.main-globalNav-searchInputContainer .Ckze8wMFNiDXk_f1IqjJ svg {
+.main-globalNav-searchInputContainer .x-searchInput-searchInputClearButton svg {
   fill: currentColor !important;
 }
 
@@ -395,11 +388,11 @@
 :root {
   --color-accent: #00e676 !important;
   --color-accent-hover: #00ff87 !important;
-  --color-bg: #f5f5f7 !important;
+  --color-bg: var(--spice-main, #f5f5f7) !important;
   --essential-bright-accent: #00e676 !important;
-  --background-base: #f5f5f7 !important;
-  --background-highlight: #e5e5ea !important;
-  --background-elevated-base: #ffffff !important;
+  --background-base: var(--spice-main, #f5f5f7) !important;
+  --background-highlight: var(--spice-selected-row, #e5e5ea) !important;
+  --background-elevated-base: var(--spice-card, #ffffff) !important;
   --shadow-base: none !important;
   --shadow-elevated: 0 8px 24px rgba(0, 0, 0, 0.06) !important;
 }
@@ -537,9 +530,41 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
 .main-home-homeHeaderBackground {
   display: none !important;
 }
-.MViMHJvcIZ6RxUXEeLSf.CEB3nzyniIFOx1yM1eYy.main-home-filterChipsSection {
+.main-home-filterChipsSection {
   --background-base: transparent !important;
 }
+/* hashed: update if filter chips area changes — hides unknown overlay near home filter chips */
 span.SrfZ87xJMiJ7OYEB4Ziz {
   display: none !important;
+}
+
+/* ---- Context Menus / Popovers ---- */
+
+.main-contextMenu-menu {
+  background: color-mix(in srgb, var(--spice-card, #ffffff) 82%, transparent) !important;
+  border: 1px solid var(--glass-border) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: 0 8px 24px var(--glass-shadow), inset 0 1px 0 var(--glass-highlight) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  overflow: hidden;
+  padding: 6px !important;
+}
+
+.main-contextMenu-menuItem {
+  border-radius: var(--radius-sm) !important;
+  transition: background var(--transition-fast), color var(--transition-fast) !important;
+}
+
+/* Active / keyboard-selected (no hover per design intent) */
+.main-contextMenu-menuItem:focus,
+.main-contextMenu-menuItem[aria-current="true"],
+.main-contextMenu-menuItem:active {
+  background: rgba(0, 230, 118, 0.08) !important;
+  color: var(--color-accent) !important;
+  outline: none !important;
+}
+
+.main-contextMenu-divider {
+  border-color: var(--glass-border) !important;
+  margin: 4px 0 !important;
 }
