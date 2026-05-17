@@ -16,9 +16,19 @@
       }
     });
 
-    // Topbar inline search
-    document.querySelectorAll('.main-globalNav-searchInputContainer').forEach((form) => {
-      form.classList.add('spice-glass-topbar');
+    // Topbar inline search — try multiple selectors for Spotify version resilience
+    const topbarSelectors = [
+      '.main-globalNav-searchInputContainer',
+      '[data-testid="topbar-search-bar"]',
+      'header [role="search"]',
+      'header form[role="search"]',
+    ];
+    topbarSelectors.forEach((sel) => {
+      document.querySelectorAll(sel).forEach((form) => {
+        if (!form.classList.contains('spice-glass-topbar')) {
+          form.classList.add('spice-glass-topbar');
+        }
+      });
     });
   };
 

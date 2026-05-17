@@ -365,9 +365,11 @@
 
 
 
-/* Playing Bar */
+/* Playing Bar — Liquid Glass */
 .Root__now-playing-bar {
-  box-shadow: 0 -16px 16px rgba(0, 0, 0, 0.05);
+  background: var(--glass-surface) !important;
+  border-top: 1px solid var(--glass-border) !important;
+  box-shadow: inset 0 1px 0 var(--glass-highlight), 0 -16px 16px rgba(0, 0, 0, 0.05) !important;
   backdrop-filter: blur(20px) saturate(180%) !important;
   transition: background 0.3s ease, box-shadow 0.3s ease;
 }
@@ -387,11 +389,26 @@
   --ui-contour: var(--spice-contour, var(--color-border));
 }
 
+/* ---- Spotify internal variable overrides ---- */
+/* Spotify's JS dynamically calls style.setProperty() and overrides our vars.
+   !important on custom properties beats inline setProperty() (no !important) */
+:root {
+  --color-accent: #00e676 !important;
+  --color-accent-hover: #00ff87 !important;
+  --color-bg: #f5f5f7 !important;
+  --essential-bright-accent: #00e676 !important;
+  --background-base: #f5f5f7 !important;
+  --background-highlight: #e5e5ea !important;
+  --background-elevated-base: #ffffff !important;
+  --shadow-base: none !important;
+  --shadow-elevated: 0 8px 24px rgba(0, 0, 0, 0.06) !important;
+}
+
 /* ---- Buttons (Only) ---- */
-/* Tertiary icon buttons */
+/* Tertiary icon buttons — green */
 .player-controls [data-encore-id="buttonTertiary"],
 .main-nowPlayingBar-container [data-encore-id="buttonTertiary"] {
-  color: var(--ui-subtext) !important;
+  color: var(--color-accent) !important;
   background: transparent !important;
   border-radius: 9999px;
   transition: color var(--transition-fast), transform var(--transition-fast);
@@ -399,17 +416,19 @@
 
 /* Hover removed */
 
-/* Primary play/pause */
-[data-testid="control-button-playpause"] {
+/* Primary play/pause — broadened for Spotify selector drift */
+[data-testid="control-button-playpause"],
+[data-testid="control-button-playpause"] > button,
+[data-testid="control-button-playpause"] button[class*="Button"] {
   background: var(--ui-accent) !important;
+  background-color: var(--ui-accent) !important;
   color: #ffffff !important;
   border-radius: 9999px !important;
   transition: background-color var(--transition-fast), transform var(--transition-fast);
 }
 
-/* Hover removed */
-
-[data-testid="control-button-playpause"]:active {
+[data-testid="control-button-playpause"]:active,
+[data-testid="control-button-playpause"] > button:active {
   transform: scale(0.98);
 }
 
@@ -456,12 +475,67 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
   border-radius: 50%;
 }
 
+/* ---- Cards ---- */
+.main-card-card {
+  background: var(--glass-surface) !important;
+  border: 1px solid var(--glass-border) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: 0 2px 8px var(--glass-shadow), inset 0 1px 0 var(--glass-highlight) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  transition: box-shadow var(--transition-fast), transform var(--transition-fast) !important;
+  overflow: hidden;
+}
+
+.main-card-card:active {
+  transform: scale(0.98);
+  box-shadow: 0 1px 4px var(--glass-shadow) !important;
+}
+
+.main-card-card .main-cardImage-imageWrapper {
+  border-radius: calc(var(--radius-md) - 1px) calc(var(--radius-md) - 1px) 0 0 !important;
+  overflow: hidden;
+}
+
+.main-card-card .main-card-cardMetadata {
+  background: transparent !important;
+}
+
+/* ---- Sidebar / Nav ---- */
+.Root__nav-bar {
+  background: var(--glass-surface) !important;
+  border-right: 1px solid var(--glass-border) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+}
+
+.main-navBar-navBar [data-encore-id="listItem"],
+.main-navBar-navBar .main-navBar-navBarItem {
+  border-radius: var(--radius-sm) !important;
+  transition: background var(--transition-fast) !important;
+}
+
+.main-navBar-navBar [data-encore-id="listItem"][aria-selected="true"],
+.main-navBar-navBar .main-navBar-navBarItem.main-navBar-navBarItemActive {
+  background: rgba(0, 230, 118, 0.10) !important;
+  color: var(--ui-accent) !important;
+}
+
+.main-rootlist-wrapper .main-rootlist-rootlistItem {
+  border-radius: var(--radius-sm) !important;
+}
+
+.main-rootlist-wrapper .main-rootlist-rootlistItem[aria-selected="true"] {
+  background: rgba(0, 230, 118, 0.08) !important;
+}
+
 /* TODO: */
 :root {
   --spice-rgb-selected-row: #ffffff;
 }
 .main-home-homeHeader {
   background-color: transparent !important;
+}
+.main-home-homeHeaderBackground {
+  display: none !important;
 }
 .MViMHJvcIZ6RxUXEeLSf.CEB3nzyniIFOx1yM1eYy.main-home-filterChipsSection {
   --background-base: transparent !important;
