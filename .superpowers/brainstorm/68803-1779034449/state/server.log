@@ -1,0 +1,19 @@
+{"type":"server-started","port":62653,"host":"127.0.0.1","url_host":"localhost","url":"http://localhost:62653","screen_dir":"/Users/naay/workspace/naay/spicetify-narablyat-theme/.superpowers/brainstorm/68803-1779034449/content","state_dir":"/Users/naay/workspace/naay/spicetify-narablyat-theme/.superpowers/brainstorm/68803-1779034449/state"}
+{"type":"screen-added","file":"/Users/naay/workspace/naay/spicetify-narablyat-theme/.superpowers/brainstorm/68803-1779034449/content/layout.html"}
+{"type":"screen-added","file":"/Users/naay/workspace/naay/spicetify-narablyat-theme/.superpowers/brainstorm/68803-1779034449/content/waiting-1.html"}
+{"type":"screen-added","file":"/Users/naay/workspace/naay/spicetify-narablyat-theme/.superpowers/brainstorm/68803-1779034449/content/background.html"}
+{"source":"user-event","type":"click","text":"C — Ambient Color Blobs\n    Soft glow spots (เหมือน Apple Music) — glass จะดูมี depth และมีชีวิตมากที่สุด","choice":"ambient","id":null,"timestamp":1779034940070}
+{"source":"user-event","type":"click","text":"B — Subtle Gradient\n    Purple-blue-green gradient อ่อนๆ — glass จะมองเห็น translucency ได้ชัด","choice":"gradient","id":null,"timestamp":1779034943118}
+{"source":"user-event","type":"click","text":"C — Ambient Color Blobs\n    Soft glow spots (เหมือน Apple Music) — glass จะดูมี depth และมีชีวิตมากที่สุด","choice":"ambient","id":null,"timestamp":1779034943735}
+{"source":"user-event","type":"click","text":"C — Ambient Color Blobs\n    Soft glow spots (เหมือน Apple Music) — glass จะดูมี depth และมีชีวิตมากที่สุด","choice":"ambient","id":null,"timestamp":1779034946302}
+{"source":"user-event","type":"click","text":"C — Ambient Color Blobs\n    Soft glow spots (เหมือน Apple Music) — glass จะดูมี depth และมีชีวิตมากที่สุด","choice":"ambient","id":null,"timestamp":1779034946468}
+{"source":"user-event","type":"click","text":"B — Subtle Gradient\n    Purple-blue-green gradient อ่อนๆ — glass จะมองเห็น translucency ได้ชัด","choice":"gradient","id":null,"timestamp":1779034947684}
+{"source":"user-event","type":"click","text":"C — Ambient Color Blobs\n    Soft glow spots (เหมือน Apple Music) — glass จะดูมี depth และมีชีวิตมากที่สุด","choice":"ambient","id":null,"timestamp":1779034948435}
+{"source":"user-event","type":"click","text":"A — Solid White (ปัจจุบัน)\n    Glass แทบไม่เห็น เพราะ background = white เหมือนกัน","choice":"solid","id":null,"timestamp":1779034948835}
+{"source":"user-event","type":"click","text":"A — Solid White (ปัจจุบัน)\n    Glass แทบไม่เห็น เพราะ background = white เหมือนกัน","choice":"solid","id":null,"timestamp":1779034949235}
+{"source":"user-event","type":"click","text":"B — Subtle Gradient\n    Purple-blue-green gradient อ่อนๆ — glass จะมองเห็น translucency ได้ชัด","choice":"gradient","id":null,"timestamp":1779034949834}
+{"source":"user-event","type":"click","text":"C — Ambient Color Blobs\n    Soft glow spots (เหมือน Apple Music) — glass จะดูมี depth และมีชีวิตมากที่สุด","choice":"ambient","id":null,"timestamp":1779034950268}
+{"source":"user-event","type":"click","text":"C — Ambient Color Blobs\n    Soft glow spots (เหมือน Apple Music) — glass จะดูมี depth และมีชีวิตมากที่สุด","choice":"ambient","id":null,"timestamp":1779034950452}
+{"type":"screen-added","file":"/Users/naay/workspace/naay/spicetify-narablyat-theme/.superpowers/brainstorm/68803-1779034449/content/noise.html"}
+{"type":"screen-added","file":"/Users/naay/workspace/naay/spicetify-narablyat-theme/.superpowers/brainstorm/68803-1779034449/content/waiting-2.html"}
+{"type":"server-stopped","reason":"idle timeout"}
