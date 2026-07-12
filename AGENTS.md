@@ -8,7 +8,7 @@ This repository is a Spicetify theme with no build system. Core files live at th
 - `theme.js` adds runtime classes to Spotify DOM nodes that static CSS cannot target reliably.
 - `color.ini` defines Spicetify color schemes, currently `suudLorLight` and `suudLorDark`.
 - `manifest.json` declares theme metadata and included files.
-- `DESIGN.md` documents the Liquid Glass visual system; consult it before changing UI behavior.
+- `docs/design-spec.md` documents the Liquid Glass visual system (tokens, elevation scale, state matrix); consult it before changing UI behavior.
 - `docs/superpowers/` stores implementation specs and plans.
 
 There is no dedicated test directory. Validation is manual through Spotify and Spicetify.
@@ -32,7 +32,7 @@ Use 2-space indentation in CSS and JavaScript. Keep CSS grouped by component or 
 
 Class names added by `theme.js` use the `spice-glass-*` prefix. Prefer stable selectors such as `data-testid`, `aria-label`, `role`, and Spicetify `main-*` or `x-*` classes. Avoid hashed Spotify class names unless unavoidable, and comment why they are needed.
 
-Follow `DESIGN.md`: frosted surfaces use `backdrop-filter: blur(20px) saturate(180%)`, electric green is functional only, and hover states are intentionally avoided in favor of focus and active states.
+Follow `docs/design-spec.md`: frosted surfaces use `backdrop-filter` blur/saturate pairs from the five-level elevation scale (§4.4), forest green is functional only (never decorative), and hover states are intentionally avoided in favor of focus and active states (list rows are the sole exception, per D1).
 
 ## Testing Guidelines
 
