@@ -1,5 +1,9 @@
+/* ============================================================
+   1. TOKENS
+   ============================================================ */
 :root {
-  /* ---- Color Palette ---- */
+  /* ==== TOKENS (Layer 1: Primitives) ====
+     Fallback values for --spice-* before Spicetify injects color.ini. */
   --color-bg: #fafafa;
   --color-surface: #ffffff;
   --color-border: #ececec;
@@ -11,353 +15,193 @@
   --color-card-shadow: rgba(0, 0, 0, 0.08);
   --noise-svg: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 
-  /* ---- Layout ---- */
+  /* ---- Layer 2: Semantic ---- */
+  /* Accent ramp (spec 4.1) — every accent alpha in the file traces to one of these */
+  --accent: var(--spice-accent, #16a34a);
+  --accent-ink: var(--spice-alt-text, #ffffff);
+  --accent-a08: color-mix(in srgb, var(--accent) 8%, transparent);
+  --accent-a12: color-mix(in srgb, var(--accent) 12%, transparent);
+  --accent-a28: color-mix(in srgb, var(--accent) 28%, transparent);
+  --accent-a40: color-mix(in srgb, var(--accent) 40%, transparent); /* decorative blob core only — fails 3:1 as a border, see D8 */
+  --accent-a75: color-mix(in srgb, var(--accent) 75%, transparent);
+
+  /* Surfaces (spec 4.2) — opacity encodes prominence, all mix --spice-card */
+  --surface-input: color-mix(in srgb, var(--spice-card, #ffffff) 52%, transparent);
+  --surface-chip: color-mix(in srgb, var(--spice-card, #ffffff) 62%, transparent);
+  --surface-modal: color-mix(in srgb, var(--spice-card, #ffffff) 72%, transparent);
+  --surface-panel: color-mix(in srgb, var(--spice-card, #ffffff) 78%, transparent);
+  --surface-popover: color-mix(in srgb, var(--spice-card, #ffffff) 82%, transparent);
+  --surface-solid: var(--spice-card, #ffffff);
+  --surface-nav: color-mix(in srgb, var(--ambient-lavender-tint) 24%, var(--spice-card, #ffffff));
+
+  /* Ambient background system (spec 6) — light defaults; dark overrides below */
+  --ambient-gradient: linear-gradient(160deg, #f0edf8 0%, #eaf5ef 100%);
+  --ambient-lavender-tint: rgb(230 225 248);
+  --ambient-blob-lavender: rgba(180, 155, 230, 0.75);
+  --ambient-blob-green: rgba(22, 163, 74, 0.55);
+
+  /* Glass chrome (spec 4.3, scheme-branched later) */
+  --glass-overlay-tint: color-mix(in srgb, var(--spice-card, #ffffff) 35%, transparent);
+  --glass-border: rgba(255, 255, 255, 0.40);
+  --glass-highlight: rgba(255, 255, 255, 0.60);
+  --glass-shadow: rgba(0, 0, 0, 0.10);
+  --edge-border: rgba(0, 0, 0, 0.08);
+  --row-hover: color-mix(in srgb, var(--spice-text, #111111) 5%, transparent);
+  --glass-ink: rgba(28, 28, 30, 0.72);
+  --glass-ink-hover: rgba(28, 28, 30, 0.86);
+  --glass-ink-border: rgba(255, 255, 255, 0.14);
+  --glass-ink-ring: var(--accent-a28);
+  --glass-ink-fg: #ffffff;
+
+  /* Elevation scale (spec 4.4) — blur/saturate pairs, never a raw px value in rules */
+  --glass-blur-1: 12px;
+  --glass-sat-1: 140%;
+  --glass-blur-2: 16px;
+  --glass-sat-2: 160%;
+  --glass-blur-3: 20px;
+  --glass-sat-3: 170%;
+  --glass-blur-4: 24px;
+  --glass-sat-4: 180%;
+  --glass-blur-5: 30px;
+  --glass-sat-5: 200%;
+
+  /* Radius scale (spec 4.5) */
   --radius-xs: 8px;
   --radius-sm: 12px;
   --radius-md: 20px;
   --radius-lg: 28px;
   --radius-xl: 32px;
+  --radius-full: 9999px;
 
-  /* ---- Transitions ---- */
+  /* Motion (spec 4.6) */
   --transition-fast: 0.15s ease;
   --transition-medium: 0.25s ease;
   --transition-slow: 0.4s ease;
-}
 
-/* Search Bar – refined, targeted overrides */
-:root {
-  --search-bg: color-mix(in srgb, var(--spice-card, #ffffff) 52%, transparent);
-  --search-bg-hover: color-mix(in srgb, var(--spice-card, #ffffff) 66%, transparent);
-  --search-bg-focus: var(--spice-card, #ffffff);
+  /* ---- Layer 3: Component ---- */
+  /* Search bar knobs */
+  --search-bg: var(--surface-input);
+  --search-bg-focus: var(--surface-solid);
   --search-border: var(--spice-contour, rgba(0, 0, 0, 0.08));
-  --search-border-hover: rgba(22, 163, 74, 0.35);
-  --search-ring: rgba(22, 163, 74, 0.28);
+  --search-ring: var(--accent-a28);
   --search-text: var(--spice-text, var(--color-text));
-  --search-subtext: var(--color-subtext);
-  --search-icon: var(--color-subtext);
-  --search-icon-hover: var(--color-accent);
+  --search-subtext: var(--ui-subtext);
+  --search-icon: var(--ui-subtext);
+  --search-icon-hover: var(--accent);
+
+  /* Spicetify color fallbacks */
+  --ui-text: var(--spice-text, var(--color-text));
+  --ui-subtext: var(--spice-subtext, var(--color-subtext));
+  --ui-accent: var(--spice-accent, var(--color-accent));
+  --ui-accent-hover: var(--spice-button-active, var(--color-accent-hover));
+  --ui-contour: var(--spice-contour, var(--color-border));
 }
 
-/* ---- Liquid Glass Modal (Search) ---- */
-:root {
-  --glass-overlay-tint: color-mix(in srgb, var(--spice-card, #ffffff) 35%, transparent);
-  --glass-surface: color-mix(in srgb, var(--spice-card, #ffffff) 72%, transparent);
-  --glass-border: rgba(255, 255, 255, 0.40);
-  --glass-highlight: rgba(255, 255, 255, 0.60);
-  --glass-shadow: rgba(0, 0, 0, 0.10);
-  --glass-ink: rgba(28, 28, 30, 0.72);
-  --glass-ink-hover: rgba(28, 28, 30, 0.86);
-  --glass-ink-border: rgba(255, 255, 255, 0.14);
-  --glass-ink-ring: rgba(22, 163, 74, 0.28);
+/* Dark-scheme token overrides (spec 4.3/6). theme.js stamps
+   data-scheme on <html> from --spice-main luminance; tokens only, never
+   component rules. */
+html[data-scheme="dark"] {
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-highlight: rgba(255, 255, 255, 0.10);
+  --glass-shadow: rgba(0, 0, 0, 0.45);
+  --edge-border: rgba(255, 255, 255, 0.08);
+  --ambient-gradient: linear-gradient(160deg, #14121d 0%, #0d1512 100%);
+  --ambient-lavender-tint: rgb(74 62 110);
+  --ambient-blob-lavender: rgba(120, 95, 190, 0.35);
+  --ambient-blob-green: rgba(22, 163, 74, 0.28);
 }
 
-/* Overlay blur and tint when search modal is open */
-.spice-glass-overlay.GenericModal__overlay {
-  background: transparent !important;
+/* ============================================================
+   2. AMBIENT / BASE
+   ============================================================ */
+
+/* ---- Ambient Background System ---- */
+body {
+  background: var(--ambient-gradient) !important;
 }
 
-.GenericModal__overlay {
-  background: transparent !important;
-}
-
-/* Topbar Search: Liquid Glass pill */
-.spice-glass-topbar {
-  background: var(--glass-surface) !important;
-  border: 1px solid var(--glass-border) !important;
-  border-radius: 9999px !important;
-  box-shadow: 0 8px 24px var(--glass-shadow), inset 0 1px 0 var(--glass-highlight) !important;
-  backdrop-filter: blur(24px) saturate(180%) !important;
-  transition: background var(--transition-medium),
-    border-color var(--transition-fast),
-    box-shadow var(--transition-medium),
-    transform var(--transition-fast) !important;
+.Root__top-container {
   position: relative;
-  overflow: hidden;
-}
-
-/* Hover removed */
-.spice-glass-topbar:focus-within {
-  border-color: var(--color-accent) !important;
-  box-shadow: 0 0 0 3px var(--glass-ink-ring), 0 12px 32px var(--glass-shadow) !important;
-  transform: translateY(-1px);
-}
-
-.spice-glass-topbar::before {
-  content: "";
-  position: absolute;
-  inset: -20% -10% auto -10%;
-  height: 80%;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.15) 70%, rgba(255, 255, 255, 0));
-  filter: blur(14px);
-  pointer-events: none;
-}
-
-.spice-glass-topbar::after {
-  content: "";
-  position: absolute;
-  right: -25%;
-  bottom: -60%;
-  width: 60%;
-  height: 160%;
-  background: radial-gradient(60% 50% at 40% 35%, rgba(22, 163, 74, 0.28), rgba(22, 163, 74, 0) 70%);
-  filter: blur(18px);
-  opacity: 0.9;
-  pointer-events: none;
-}
-
-/* Input text within topbar glass */
-.spice-glass-topbar .x-searchInput-searchInputInput,
-.spice-glass-topbar input[type="search"] {
   background: transparent !important;
-  color: var(--search-text) !important;
+  z-index: 1;
 }
 
-/* Leading icon + trailing chips inside topbar */
-.spice-glass-topbar .e-91000-form-input-icon__icon--leading svg,
-.spice-glass-topbar .x-searchInput-searchInputSearchIcon {
-  color: var(--search-icon) !important;
-  fill: var(--search-icon) !important;
-  transition: color var(--transition-fast), fill var(--transition-fast), transform var(--transition-fast);
+.spice-ambient-blob-1 {
+  position: fixed;
+  top: -80px;
+  left: -80px;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, var(--ambient-blob-lavender), transparent 70%);
+  filter: blur(80px);
+  z-index: 0;
+  pointer-events: none;
 }
 
-/* Hover removed */
-.spice-glass-topbar:focus-within .e-91000-form-input-icon__icon--leading svg,
-.spice-glass-topbar:focus-within .x-searchInput-searchInputSearchIcon {
-  transform: scale(1.06);
-  color: var(--color-accent) !important;
-  fill: var(--color-accent) !important;
+.spice-ambient-blob-2 {
+  position: fixed;
+  bottom: -60px;
+  right: -60px;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, var(--ambient-blob-green), transparent 70%);
+  filter: blur(60px);
+  z-index: 0;
+  pointer-events: none;
 }
 
-.spice-glass-topbar .x-searchInput-searchInputClearButton {
-  background: rgba(0, 0, 0, 0.04) !important;
-  border: 1px solid rgba(255, 255, 255, 0.18) !important;
-  border-radius: 9999px !important;
-  color: var(--search-icon) !important;
-  transition: background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast) !important;
-}
+/* ============================================================
+   3. LAYOUT ROOTS
+   ============================================================ */
 
-/* Hover removed */
-
-/* Home nav chip in the same container */
-.main-globalNav-searchContainer .main-globalNav-navLink {
-  background: rgba(0, 0, 0, 0.04) !important;
-  border: 1px solid rgba(255, 255, 255, 0.18) !important;
-  border-radius: 9999px !important;
-  transition: background var(--transition-fast), transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast) !important;
-}
-
-/* Hover removed - only active state */
-.main-globalNav-searchContainer .main-globalNav-navLink.main-globalNav-navLinkActive {
-  background: rgba(22, 163, 74, 0.12) !important;
-  border-color: rgba(22, 163, 74, 0.35) !important;
-}
-
-/* The dialog card */
-.spice-glass-dialog[role="dialog"][aria-label="Search"] {
+/* ---- Nav Bar ---- */
+.Root__nav-bar {
   position: relative;
-  background: var(--glass-surface) !important;
-  border: 1px solid var(--glass-border) !important;
-  border-radius: var(--radius-lg) !important;
-  box-shadow: 0 20px 40px var(--glass-shadow), inset 0 1px 0 var(--glass-highlight) !important;
-  backdrop-filter: blur(24px) saturate(180%) !important;
-  overflow: hidden;
-  margin: 6vh auto !important;
+  background: var(--surface-nav) !important;
+  border-right: 1px solid var(--edge-border) !important;
+  backdrop-filter: blur(var(--glass-blur-1)) saturate(var(--glass-sat-1)) !important;
 }
 
-.spice-glass-dialog[role="dialog"][aria-label="Search"]::before {
+.Root__nav-bar::after {
   content: "";
   position: absolute;
-  top: -25%;
-  left: -10%;
-  width: 60%;
-  height: 60%;
-  background: radial-gradient(55% 55% at 30% 30%, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0.15) 100%);
-  filter: blur(14px);
+  inset: 0;
+  border-radius: 0;
+  background-image: var(--noise-svg);
+  background-size: 180px 180px;
+  opacity: 0.038;
+  mix-blend-mode: overlay;
   pointer-events: none;
 }
 
-.spice-glass-dialog[role="dialog"][aria-label="Search"]::after {
+/* Clearance for floating player bar */
+.Root__main-view {
+  padding-bottom: 96px !important;
+}
+
+/* ---- Right Sidebar Panel ---- */
+.Root__right-sidebar,
+[data-testid="right-sidebar"] {
+  /* 60% (not 58%) keeps light-scheme contrast vs --surface-panel at ~4.9:1, comfortably over AA 4.5:1 */
+  --text-subdued: color-mix(in srgb, var(--ui-text) 60%, transparent);
+  position: relative;
+  background: var(--surface-panel) !important;
+  border-left: 1px solid var(--edge-border) !important;
+  box-shadow: -6px 0 18px color-mix(in srgb, var(--edge-border) 75%, transparent) !important;
+  backdrop-filter: blur(var(--glass-blur-2)) saturate(var(--glass-sat-2)) !important;
+}
+
+.Root__right-sidebar::after,
+[data-testid="right-sidebar"]::after {
   content: "";
   position: absolute;
-  right: -15%;
-  bottom: -20%;
-  width: 50%;
-  height: 50%;
-  background: radial-gradient(60% 65% at 40% 35%, rgba(22, 163, 74, 0.35) 0%, rgba(22, 163, 74, 0.18) 50%, rgba(22, 163, 74, 0) 100%);
-  filter: blur(18px);
-  opacity: 0.85;
-  animation: glassBlob 12s ease-in-out infinite alternate;
+  inset: 0;
+  background-image: var(--noise-svg);
+  background-size: 180px 180px;
+  opacity: 0.038;
+  mix-blend-mode: overlay;
   pointer-events: none;
 }
-
-@keyframes glassBlob {
-  0% {
-    transform: translate(0, 0) scale(1);
-  }
-
-  100% {
-    transform: translate(-6%, -4%) scale(1.06);
-  }
-}
-
-/* Search input pill inside modal */
-.spice-glass-dialog .spice-glass-inputWrap {
-  background: var(--glass-ink) !important;
-  border: 1px solid var(--glass-ink-border) !important;
-  border-radius: 9999px !important;
-  padding: 8px 12px !important;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
-  transition: background var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast) !important;
-}
-
-/* Hover removed */
-.spice-glass-dialog .spice-glass-inputWrap:focus-within {
-  border-color: var(--color-accent) !important;
-  box-shadow: 0 0 0 3px var(--glass-ink-ring) !important;
-}
-
-.spice-glass-dialog .spice-glass-inputWrap svg {
-  color: #ffffff;
-  fill: #ffffff;
-  opacity: 0.9;
-}
-
-.spice-glass-dialog [data-testid="search-modal-input"] {
-  background: transparent !important;
-  color: #ffffff !important;
-  outline: none !important;
-  border: none !important;
-  box-shadow: none !important;
-}
-
-/* Results list + row hover */
-.spice-glass-dialog #search-modal-listbox {
-  background: transparent !important;
-}
-
-.spice-glass-dialog [role="option"] {
-  border-radius: var(--radius-sm);
-}
-
-/* Hover removed - only selected state */
-.spice-glass-dialog [role="option"][aria-selected="true"] {
-  background: rgba(22, 163, 74, 0.08) !important;
-}
-
-/* Shortcut chips */
-.spice-glass-dialog kbd {
-  background: rgba(0, 0, 0, 0.06) !important;
-  border: 1px solid rgba(0, 0, 0, 0.08) !important;
-  border-bottom-width: 2px !important;
-  border-radius: var(--radius-xs) !important;
-}
-
-/* Wrapper: pill, glass, smooth transitions */
-.main-globalNav-searchInputContainer {
-  background: var(--search-bg) !important;
-  border: 1px solid var(--search-border) !important;
-  border-radius: 9999px !important;
-  box-shadow: 0 6px 18px var(--color-card-shadow) !important;
-  transition: background var(--transition-medium),
-    border-color var(--transition-fast),
-    box-shadow var(--transition-medium),
-    transform var(--transition-fast) !important;
-  backdrop-filter: blur(20px) saturate(180%) !important;
-}
-
-/* Hover removed */
-
-.main-globalNav-searchInputContainer:focus-within {
-  background: var(--search-bg-focus) !important;
-  border-color: var(--color-accent) !important;
-  box-shadow: 0 0 0 3px var(--search-ring), 0 8px 22px var(--color-card-shadow) !important;
-  transform: translateY(-1px);
-}
-
-/* Input: text + placeholder */
-.main-globalNav-searchInputContainer .x-searchInput-searchInputInput,
-.main-globalNav-searchInputContainer input[type="search"],
-.main-globalNav-searchInputContainer input[type="text"] {
-  background: transparent !important;
-  color: var(--search-text) !important;
-  outline: none !important;
-  box-shadow: none !important;
-}
-
-.main-globalNav-searchInputContainer .x-searchInput-searchInputInput::placeholder,
-.main-globalNav-searchInputContainer input::placeholder {
-  color: var(--search-subtext) !important;
-  opacity: 0.8 !important;
-}
-
-/* Overlay placeholder: handled by ::placeholder pseudo-element above */
-
-/* Leading search icon */
-.main-globalNav-searchInputContainer .x-searchInput-searchInputSearchIcon,
-.main-globalNav-searchInputContainer .e-91000-form-input-icon__icon--leading svg {
-  fill: var(--search-icon) !important;
-  color: var(--search-icon) !important;
-  transition: color var(--transition-fast), fill var(--transition-fast), transform var(--transition-fast) !important;
-}
-
-/* Hover removed */
-
-.main-globalNav-searchInputContainer:focus-within .x-searchInput-searchInputSearchIcon,
-.main-globalNav-searchInputContainer:focus-within .e-91000-form-input-icon__icon--leading svg {
-  transform: scale(1.05);
-  fill: var(--color-accent) !important;
-}
-
-/* Trailing buttons: clear + browse */
-.main-globalNav-searchInputContainer .x-searchInput-searchInputClearButton {
-  background: transparent !important;
-  border-radius: 9999px !important;
-  color: var(--search-icon) !important;
-  transition: background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast) !important;
-}
-
-/* Hover removed */
-
-.main-globalNav-searchInputContainer .x-searchInput-searchInputClearButton svg {
-  fill: currentColor !important;
-}
-
-/* Dropdown panel styling */
-#search-dropdown {
-  background: var(--search-bg-focus) !important;
-  border: 1px solid var(--search-border) !important;
-  border-radius: var(--radius-lg) !important;
-  box-shadow: 0 12px 28px var(--color-card-shadow) !important;
-  overflow: hidden !important;
-}
-
-#search-dropdown [data-overlayscrollbars-viewport] {
-  background: transparent !important;
-}
-
-#search-dropdown p,
-#search-dropdown li,
-#search-dropdown button {
-  color: var(--search-text) !important;
-}
-
-#search-dropdown .x-searchHistoryEntries-clearSingleSearchHistory {
-  background: transparent !important;
-  border-radius: var(--radius-sm) !important;
-  color: var(--search-icon) !important;
-}
-
-/* Hover removed */
-
-/* Remove global input/button overrides in favor of targeted ones above */
-/* intentionally empty: no generic button:hover or input:hover rules */
-
-
-
-
 
 /* Playing Bar — Floating Liquid Glass */
 .Root__now-playing-bar {
@@ -365,13 +209,13 @@
   bottom: 16px !important;
   left: 16px !important;
   right: 16px !important;
-  border-radius: 28px !important;
-  background: var(--glass-surface) !important;
-  border: 1px solid rgba(255, 255, 255, 0.72) !important;
+  border-radius: var(--radius-lg) !important;
+  background: var(--surface-modal) !important;
+  border: 1px solid var(--glass-highlight) !important;
   box-shadow:
-    0 12px 40px rgba(0, 0, 0, 0.13),
-    inset 0 1px 0 rgba(255, 255, 255, 0.90) !important;
-  backdrop-filter: blur(30px) saturate(200%) !important;
+    0 10px 32px var(--glass-shadow),
+    inset 0 1px 0 var(--glass-highlight) !important;
+  backdrop-filter: blur(var(--glass-blur-5)) saturate(var(--glass-sat-5)) !important;
   transition: background var(--transition-medium), box-shadow var(--transition-medium) !important;
   overflow: hidden !important;
   z-index: 100 !important;
@@ -386,7 +230,7 @@
   background: linear-gradient(
     105deg,
     transparent 30%,
-    rgba(255, 255, 255, 0.45) 50%,
+    color-mix(in srgb, var(--glass-highlight) 75%, transparent) 50%,
     transparent 70%
   );
   pointer-events: none;
@@ -409,52 +253,331 @@
   z-index: 0;
 }
 
-/* Clearance for floating player bar */
-.Root__main-view {
-  padding-bottom: 96px !important;
+/* ============================================================
+   4. COMPONENTS
+   ============================================================ */
+
+/* ---- Search: Topbar ---- */
+
+/* Topbar Search: Liquid Glass pill */
+.spice-glass-topbar {
+  background: var(--search-bg) !important;
+  border: 1px solid var(--glass-border) !important;
+  border-radius: var(--radius-full) !important;
+  box-shadow: 0 8px 24px var(--glass-shadow), inset 0 1px 0 var(--glass-highlight) !important;
+  backdrop-filter: blur(var(--glass-blur-4)) saturate(var(--glass-sat-4)) !important;
+  transition: background var(--transition-medium),
+    border-color var(--transition-fast),
+    box-shadow var(--transition-medium),
+    transform var(--transition-fast) !important;
+  position: relative;
+  overflow: hidden;
 }
+
+.spice-glass-topbar:focus-within {
+  background: var(--search-bg-focus) !important;
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px var(--glass-ink-ring), 0 12px 32px var(--glass-shadow) !important;
+  transform: translateY(-1px);
+}
+
+.spice-glass-topbar::before {
+  content: "";
+  position: absolute;
+  inset: -20% -10% auto -10%;
+  height: 80%;
+  background: linear-gradient(180deg, var(--glass-highlight), color-mix(in srgb, var(--glass-highlight) 25%, transparent) 70%, transparent);
+  filter: blur(14px);
+  pointer-events: none;
+}
+
+.spice-glass-topbar::after {
+  content: "";
+  position: absolute;
+  right: -25%;
+  bottom: -60%;
+  width: 60%;
+  height: 160%;
+  background: radial-gradient(60% 50% at 40% 35%, var(--accent-a28), transparent 70%);
+  filter: blur(18px);
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+/* Input text within topbar glass */
+.spice-glass-topbar .x-searchInput-searchInputInput,
+.spice-glass-topbar input[type="search"] {
+  background: transparent !important;
+  color: var(--search-text) !important;
+}
+
+/* Leading icon + trailing chips inside topbar */
+.spice-glass-topbar .e-91000-form-input-icon__icon--leading svg,
+.spice-glass-topbar .x-searchInput-searchInputSearchIcon {
+  color: var(--search-icon) !important;
+  fill: var(--search-icon) !important;
+  transition: color var(--transition-fast), fill var(--transition-fast), transform var(--transition-fast);
+}
+
+.spice-glass-topbar:focus-within .e-91000-form-input-icon__icon--leading svg,
+.spice-glass-topbar:focus-within .x-searchInput-searchInputSearchIcon {
+  transform: scale(1.06);
+  color: var(--search-icon-hover) !important;
+  fill: var(--search-icon-hover) !important;
+}
+
+.spice-glass-topbar .x-searchInput-searchInputClearButton {
+  background: color-mix(in srgb, var(--edge-border) 50%, transparent) !important;
+  border: 1px solid color-mix(in srgb, var(--glass-highlight) 30%, transparent) !important;
+  border-radius: var(--radius-full) !important;
+  color: var(--search-icon) !important;
+  transition: background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast) !important;
+}
+
+/* Home nav chip in the same container */
+.main-globalNav-searchContainer .main-globalNav-navLink {
+  background: color-mix(in srgb, var(--edge-border) 50%, transparent) !important;
+  border: 1px solid color-mix(in srgb, var(--glass-highlight) 30%, transparent) !important;
+  border-radius: var(--radius-full) !important;
+  transition: background var(--transition-fast), transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast) !important;
+}
+
+.main-globalNav-searchContainer .main-globalNav-navLink.main-globalNav-navLinkActive {
+  background: var(--accent-a12) !important;
+  /* solid --accent, not --accent-a40: a40 only reads ~1.6-1.9:1 against this
+     glass surface, short of the 3:1 non-text target (spec D8) */
+  border-color: var(--accent) !important;
+}
+
+/* theme.js adds .spice-glass-topbar to this same element, which owns all
+   container-level styling (background/border/blur/shadow/lift). Rules below
+   are internals only — input text, placeholder, icons, clear button. */
+
+/* Input: text + placeholder */
+.main-globalNav-searchInputContainer .x-searchInput-searchInputInput,
+.main-globalNav-searchInputContainer input[type="search"],
+.main-globalNav-searchInputContainer input[type="text"] {
+  background: transparent !important;
+  color: var(--search-text) !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.main-globalNav-searchInputContainer .x-searchInput-searchInputInput::placeholder,
+.main-globalNav-searchInputContainer input::placeholder {
+  color: var(--search-subtext) !important;
+  /* 0.94 (not 0.8): the topbar's resting background is --surface-input (52% card
+     mix, the most transparent surface in the file), so placeholder text has the
+     least surface backing of anything in the theme; the extra headroom keeps it
+     clear of the 4.5:1 AA target across the ambient-blur range in both schemes */
+  opacity: 0.94 !important;
+}
+
+/* Overlay placeholder: handled by ::placeholder pseudo-element above */
+
+/* Leading search icon */
+.main-globalNav-searchInputContainer .x-searchInput-searchInputSearchIcon,
+.main-globalNav-searchInputContainer .e-91000-form-input-icon__icon--leading svg {
+  fill: var(--search-icon) !important;
+  color: var(--search-icon) !important;
+  transition: color var(--transition-fast), fill var(--transition-fast), transform var(--transition-fast) !important;
+}
+
+.main-globalNav-searchInputContainer:focus-within .x-searchInput-searchInputSearchIcon,
+.main-globalNav-searchInputContainer:focus-within .e-91000-form-input-icon__icon--leading svg {
+  transform: scale(1.05);
+  fill: var(--search-icon-hover) !important;
+}
+
+/* Trailing buttons: clear + browse */
+.main-globalNav-searchInputContainer .x-searchInput-searchInputClearButton {
+  background: transparent !important;
+  border-radius: var(--radius-full) !important;
+  color: var(--search-icon) !important;
+  transition: background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast) !important;
+}
+
+.main-globalNav-searchInputContainer .x-searchInput-searchInputClearButton svg {
+  fill: currentColor !important;
+}
+
+/* ---- Search: Modal ---- */
+
+/* Overlay blur and tint when search modal is open */
+.spice-glass-overlay.GenericModal__overlay {
+  background: transparent !important;
+}
+
+/* The dialog card */
+.spice-glass-dialog[role="dialog"][aria-label="Search"] {
+  position: relative;
+  background: var(--surface-modal) !important;
+  border: 1px solid var(--glass-border) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: 0 20px 40px var(--glass-shadow), inset 0 1px 0 var(--glass-highlight) !important;
+  backdrop-filter: blur(var(--glass-blur-4)) saturate(var(--glass-sat-4)) !important;
+  overflow: hidden;
+  margin: 6vh auto !important;
+}
+
+.spice-glass-dialog[role="dialog"][aria-label="Search"]::before {
+  content: "";
+  position: absolute;
+  top: -25%;
+  left: -10%;
+  width: 60%;
+  height: 60%;
+  background: radial-gradient(55% 55% at 30% 30%, var(--glass-highlight) 0%, color-mix(in srgb, var(--glass-highlight) 25%, transparent) 100%);
+  filter: blur(14px);
+  pointer-events: none;
+}
+
+.spice-glass-dialog[role="dialog"][aria-label="Search"]::after {
+  content: "";
+  position: absolute;
+  right: -15%;
+  bottom: -20%;
+  width: 50%;
+  height: 50%;
+  background: radial-gradient(60% 65% at 40% 35%, var(--accent-a40) 0%, var(--accent-a12) 50%, transparent 100%);
+  filter: blur(18px);
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+/* Decorative drift only; skipped entirely under prefers-reduced-motion (spec 4.6) */
+@media (prefers-reduced-motion: no-preference) {
+  .spice-glass-dialog[role="dialog"][aria-label="Search"]::after {
+    animation: glassBlob 12s ease-in-out infinite alternate;
+  }
+
+  @keyframes glassBlob {
+    0% {
+      transform: translate(0, 0) scale(1);
+    }
+
+    100% {
+      transform: translate(-6%, -4%) scale(1.06);
+    }
+  }
+}
+
+/* Search input pill inside modal */
+.spice-glass-dialog .spice-glass-inputWrap {
+  background: var(--glass-ink) !important;
+  border: 1px solid var(--glass-ink-border) !important;
+  border-radius: var(--radius-full) !important;
+  padding: 8px 12px !important;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--glass-ink-border) 43%, transparent);
+  transition: background var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast) !important;
+}
+
+.spice-glass-dialog .spice-glass-inputWrap:focus-within {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px var(--glass-ink-ring) !important;
+}
+
+.spice-glass-dialog .spice-glass-inputWrap svg {
+  color: var(--glass-ink-fg);
+  fill: var(--glass-ink-fg);
+  opacity: 0.9;
+}
+
+.spice-glass-dialog [data-testid="search-modal-input"] {
+  background: transparent !important;
+  color: var(--glass-ink-fg) !important;
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Results list + row hover */
+.spice-glass-dialog #search-modal-listbox {
+  background: transparent !important;
+}
+
+.spice-glass-dialog [role="option"] {
+  border-radius: var(--radius-sm);
+}
+
+/* Dense list row: pointer tracking in a long results list (spec 5, D1) */
+.spice-glass-dialog [role="option"]:hover {
+  background: var(--row-hover) !important;
+}
+
+.spice-glass-dialog [role="option"][aria-selected="true"] {
+  background: var(--accent-a08) !important;
+  /* Non-color cue alongside the bg tint (spec 5 non-color signal rule) */
+  box-shadow: inset 2px 0 0 var(--accent-a75) !important;
+}
+
+/* Shortcut chips */
+.spice-glass-dialog kbd {
+  background: color-mix(in srgb, var(--spice-text) 6%, transparent) !important;
+  border: 1px solid color-mix(in srgb, var(--spice-text) 8%, transparent) !important;
+  border-bottom-width: 2px !important;
+  border-radius: var(--radius-xs) !important;
+}
+
+/* ---- Search: Dropdown ---- */
+
+/* Dropdown panel styling */
+#search-dropdown {
+  background: var(--search-bg-focus) !important;
+  border: 1px solid var(--search-border) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: 0 12px 28px var(--glass-shadow) !important;
+  backdrop-filter: blur(var(--glass-blur-3)) saturate(var(--glass-sat-3)) !important;
+  overflow: hidden !important;
+}
+
+#search-dropdown [data-overlayscrollbars-viewport] {
+  background: transparent !important;
+}
+
+#search-dropdown p,
+#search-dropdown li,
+#search-dropdown button {
+  color: var(--search-text) !important;
+}
+
+#search-dropdown .x-searchHistoryEntries-clearSingleSearchHistory {
+  background: transparent !important;
+  border-radius: var(--radius-sm) !important;
+  color: var(--search-icon) !important;
+}
+
+/* ---- Player Controls ---- */
 
 .main-genericButton-button {
-  color: var(--color-subtext) !important;
-}
-
-/* ---- Spicetify color fallbacks ---- */
-:root {
-  --ui-text: var(--spice-text, var(--color-text));
-  --ui-subtext: var(--spice-subtext, var(--color-subtext));
-  --ui-accent: var(--spice-accent, var(--color-accent));
-  --ui-accent-hover: var(--spice-button-active, var(--color-accent-hover));
-  --ui-contour: var(--spice-contour, var(--color-border));
-}
-
-/* ---- Spotify internal variable overrides ---- */
-/* Spotify's JS dynamically calls style.setProperty() and overrides our vars.
-   !important on custom properties beats inline setProperty() (no !important) */
-:root {
-  --color-accent: #16a34a !important;
-  --color-accent-hover: #18b34a !important;
-  --color-bg: var(--spice-main, #fafafa) !important;
-  --essential-bright-accent: #16a34a !important;
-  --background-base: color-mix(in srgb, var(--spice-main, #f5f5f7) 65%, transparent) !important;
-  --background-highlight: var(--spice-selected-row, #e5e5ea) !important;
-  --background-elevated-base: color-mix(in srgb, var(--spice-card, #ffffff) 65%, transparent) !important;
-  --shadow-base: none !important;
-  --shadow-elevated: none !important;
-  --shadow-overlay: none !important;
-  --encore-elevated-surface-shadow: none !important;
+  color: var(--ui-subtext) !important;
 }
 
 /* ---- Buttons (Only) ---- */
-/* Tertiary icon buttons — green */
+/* Tertiary icon buttons default to neutral; active states carry the accent. */
 .player-controls [data-encore-id="buttonTertiary"],
 .main-nowPlayingBar-container [data-encore-id="buttonTertiary"] {
-  color: var(--color-accent) !important;
+  color: var(--ui-subtext) !important;
   background: transparent !important;
-  border-radius: 9999px;
+  border-radius: var(--radius-full);
   transition: color var(--transition-fast), transform var(--transition-fast);
 }
 
-/* Hover removed */
+.player-controls [data-encore-id="buttonTertiary"]:active,
+.main-nowPlayingBar-container [data-encore-id="buttonTertiary"]:active {
+  transform: scale(0.98);
+}
+
+.main-genericButton-button.main-genericButton-buttonActive,
+.player-controls [data-encore-id="buttonTertiary"][aria-checked="true"],
+.main-nowPlayingBar-container [data-encore-id="buttonTertiary"][aria-checked="true"],
+.player-controls [aria-checked="true"],
+.main-nowPlayingBar-container [aria-checked="true"] {
+  color: var(--ui-accent) !important;
+}
 
 /* Primary play/pause — broadened for Spotify selector drift */
 [data-testid="control-button-playpause"],
@@ -462,8 +585,8 @@
 [data-testid="control-button-playpause"] button[class*="Button"] {
   background: var(--ui-accent) !important;
   background-color: var(--ui-accent) !important;
-  color: #ffffff !important;
-  border-radius: 9999px !important;
+  color: var(--accent-ink) !important;
+  border-radius: var(--radius-full) !important;
   transition: background-color var(--transition-fast), transform var(--transition-fast);
 }
 
@@ -489,7 +612,7 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
 [data-testid="mini-player-button"] {
   min-width: 36px !important;
   min-height: 36px !important;
-  border-radius: 9999px !important;
+  border-radius: var(--radius-full) !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -499,7 +622,7 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
 /* Round rails */
 .playback-bar [data-testid="progress-bar"],
 .volume-bar [data-testid="progress-bar"] {
-  border-radius: 9999px;
+  border-radius: var(--radius-full);
 }
 
 /* Rail background */
@@ -507,20 +630,20 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
 .volume-bar [data-testid="progress-bar"] [data-testid="progress-bar-background"]>div:first-child>div {
   background-color: var(--ui-contour) !important;
   height: 6px;
-  border-radius: 9999px;
+  border-radius: var(--radius-full);
 }
 
 /* Fill */
 .playback-bar [data-testid="progress-bar"] [data-testid="progress-bar-background"]>div:nth-child(2)>div {
   background-color: var(--ui-accent) !important;
   height: 6px;
-  border-radius: 9999px;
+  border-radius: var(--radius-full);
 }
 
 .volume-bar [data-testid="progress-bar"] [data-testid="progress-bar-background"]>div:nth-child(2)>div {
-  background-color: rgba(22, 163, 74, 0.75);
+  background-color: var(--accent-a75);
   height: 6px;
-  border-radius: 9999px;
+  border-radius: var(--radius-full);
 }
 
 /* Handle (no borders) */
@@ -535,11 +658,11 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
 /* ---- Cards ---- */
 .main-card-card {
   position: relative;
-  background: color-mix(in srgb, rgba(235, 230, 252, 1) 8%, var(--spice-card, #ffffff)) !important;
+  background: color-mix(in srgb, var(--ambient-lavender-tint) 8%, var(--surface-solid)) !important;
   border: 1px solid var(--glass-border) !important;
   border-radius: var(--radius-md) !important;
   box-shadow: 0 2px 8px var(--glass-shadow), inset 0 1px 0 var(--glass-highlight) !important;
-  backdrop-filter: blur(16px) saturate(160%) !important;
+  backdrop-filter: blur(var(--glass-blur-2)) saturate(var(--glass-sat-2)) !important;
   transition: box-shadow var(--transition-fast), transform var(--transition-fast) !important;
   overflow: hidden;
 }
@@ -570,55 +693,7 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
   background: transparent !important;
 }
 
-/* ---- Sidebar / Nav ---- */
-/* hashed: Your Library panel wrapper — removes default elevation shadow */
-.HFowbNOgNPgtZSE4 {
-  box-shadow: none !important;
-}
-/* hashed: Your Library sticky list header scroll shadow */
-.pH4ZUdfvwTB_sRS_.ubsAl0Z3N0XZgmhy {
-  box-shadow: none !important;
-}
-
-.Root__nav-bar {
-  position: relative;
-  background: color-mix(in srgb, rgba(230, 225, 248, 1) 18%, var(--spice-card, #ffffff)) !important;
-  border-right: 1px solid rgba(0, 0, 0, 0.07) !important;
-  backdrop-filter: blur(12px) saturate(140%) !important;
-}
-
-.Root__nav-bar::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 0;
-  background-image: var(--noise-svg);
-  background-size: 180px 180px;
-  opacity: 0.038;
-  mix-blend-mode: overlay;
-  pointer-events: none;
-}
-
-/* ---- Right Sidebar Panel ---- */
-[data-testid="right-sidebar"] {
-  position: relative;
-  background: color-mix(in srgb, var(--spice-card, #ffffff) 68%, transparent) !important;
-  border-left: 1px solid rgba(0, 0, 0, 0.07) !important;
-  box-shadow: -3px 0 12px rgba(0, 0, 0, 0.05) !important;
-  backdrop-filter: blur(18px) saturate(155%) !important;
-}
-
-[data-testid="right-sidebar"]::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: var(--noise-svg);
-  background-size: 180px 180px;
-  opacity: 0.038;
-  mix-blend-mode: overlay;
-  pointer-events: none;
-}
-
+/* ---- List Rows ---- */
 .main-navBar-navBar [data-encore-id="listItem"],
 .main-navBar-navBar .main-navBar-navBarItem {
   border-radius: var(--radius-sm) !important;
@@ -627,13 +702,16 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
 
 .main-navBar-navBar [data-encore-id="listItem"]:hover,
 .main-navBar-navBar .main-navBar-navBarItem:hover {
-  background: #f3f3f3 !important;
+  background: var(--row-hover) !important;
 }
 
 .main-navBar-navBar [data-encore-id="listItem"][aria-selected="true"],
 .main-navBar-navBar .main-navBar-navBarItem.main-navBar-navBarItemActive {
-  background: rgba(22, 163, 74, 0.10) !important;
+  background: var(--accent-a08) !important;
   color: var(--ui-accent) !important;
+  /* Non-color cue alongside the bg tint (spec 5 non-color signal rule),
+     matching the rootlist/context-menu/search-modal selected-row pattern */
+  box-shadow: inset 2px 0 0 var(--accent-a75) !important;
 }
 
 .main-rootlist-wrapper .main-rootlist-rootlistItem {
@@ -641,45 +719,30 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
 }
 
 .main-rootlist-wrapper .main-rootlist-rootlistItem:hover {
-  background: #f3f3f3 !important;
+  background: var(--row-hover) !important;
 }
 
 .main-rootlist-wrapper .main-rootlist-rootlistItem[aria-selected="true"] {
-  background: rgba(22, 163, 74, 0.08) !important;
+  background: var(--accent-a08) !important;
+  /* Non-color cue alongside the bg tint (spec 5 non-color signal rule) */
+  box-shadow: inset 2px 0 0 var(--accent-a75) !important;
 }
 
 /* Currently-playing playlist indicator */
 .main-rootlist-wrapper .main-rootlist-rootlistItem[aria-current="true"] {
-  box-shadow: inset 3px 0 0 var(--color-accent) !important;
-  background: rgba(22, 163, 74, 0.06) !important;
+  box-shadow: inset 3px 0 0 var(--accent) !important;
+  background: var(--accent-a08) !important;
 }
 
-/* TODO: */
-:root {
-  --spice-rgb-selected-row: #ffffff;
-}
-.main-home-homeHeader {
-  background-color: transparent !important;
-  background: transparent !important;
-}
-.main-home-homeHeader::after {
-  display: none !important;
-}
-.main-home-homeHeaderBackground {
-  display: none !important;
-}
-.main-home-filterChipsSection {
-  --background-base: transparent !important;
-}
-
+/* ---- Chips / Tabs ---- */
 .main-home-filterChipsSection [role="tab"],
 .main-home-filterChipsSection button[class*="chip"],
 .main-home-filterChipsSection [class*="filterChip"] {
-  background: color-mix(in srgb, var(--spice-card, #ffffff) 62%, transparent) !important;
+  background: var(--surface-chip) !important;
   border: 1px solid var(--glass-border) !important;
-  border-radius: 9999px !important;
-  backdrop-filter: blur(12px) saturate(140%) !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), inset 0 1px 0 var(--glass-highlight) !important;
+  border-radius: var(--radius-full) !important;
+  backdrop-filter: blur(var(--glass-blur-1)) saturate(var(--glass-sat-1)) !important;
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--edge-border) 75%, transparent), inset 0 1px 0 var(--glass-highlight) !important;
   transition: background var(--transition-fast), box-shadow var(--transition-fast) !important;
 }
 
@@ -691,21 +754,18 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
 .main-home-filterChipsSection [class*="filterChip"][aria-checked="true"],
 .main-home-filterChipsSection .e-10451-legacy-chip--selected,
 [data-encore-id="chip"][aria-checked="true"] {
-  background: rgba(22, 163, 74, 0.14) !important;
-  border-color: rgba(22, 163, 74, 0.40) !important;
-  box-shadow: 0 2px 8px rgba(22, 163, 74, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
+  background: var(--accent-a12) !important;
+  /* solid --accent, not --accent-a40: a40 only reads ~1.6-1.9:1 against
+     --surface-chip, short of the 3:1 non-text target (spec D8) */
+  border-color: var(--accent) !important;
+  box-shadow: 0 2px 8px var(--accent-a12), inset 0 1px 0 var(--glass-highlight) !important;
 }
 
 /* prevent encore's color inversion inside selected chips */
 [data-encore-id="chip"][aria-checked="true"] .encore-inverted-light-set,
 .e-10451-legacy-chip--selected .e-10451-legacy-chip__inner {
-  color: #16a34a !important;
+  color: var(--accent) !important;
   background: transparent !important;
-}
-
-/* hashed: update if filter chips area changes — hides unknown overlay near home filter chips */
-span.SrfZ87xJMiJ7OYEB4Ziz {
-  display: none !important;
 }
 
 /* Search-page category chips (All, Songs, Artists, Albums…) */
@@ -713,11 +773,11 @@ span.SrfZ87xJMiJ7OYEB4Ziz {
 [data-testid="search-filters"] [role="tab"],
 [class*="searchCategoryFilter"] [role="tab"],
 .main-entityNavigationTabBar-tabBar [role="tab"] {
-  background: color-mix(in srgb, var(--spice-card, #ffffff) 62%, transparent) !important;
+  background: var(--surface-chip) !important;
   border: 1px solid var(--glass-border) !important;
-  border-radius: 9999px !important;
-  backdrop-filter: blur(12px) saturate(140%) !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), inset 0 1px 0 var(--glass-highlight) !important;
+  border-radius: var(--radius-full) !important;
+  backdrop-filter: blur(var(--glass-blur-1)) saturate(var(--glass-sat-1)) !important;
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--edge-border) 75%, transparent), inset 0 1px 0 var(--glass-highlight) !important;
   transition: background var(--transition-fast), box-shadow var(--transition-fast) !important;
 }
 
@@ -725,20 +785,22 @@ span.SrfZ87xJMiJ7OYEB4Ziz {
 [data-testid="search-filters"] [role="tab"][aria-selected="true"],
 [class*="searchCategoryFilter"] [role="tab"][aria-selected="true"],
 .main-entityNavigationTabBar-tabBar [role="tab"][aria-selected="true"] {
-  background: rgba(22, 163, 74, 0.14) !important;
-  border-color: rgba(22, 163, 74, 0.40) !important;
-  box-shadow: 0 2px 8px rgba(22, 163, 74, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
+  background: var(--accent-a12) !important;
+  /* solid --accent, not --accent-a40: a40 only reads ~1.6-1.9:1 against
+     --surface-chip, short of the 3:1 non-text target (spec D8) */
+  border-color: var(--accent) !important;
+  box-shadow: 0 2px 8px var(--accent-a12), inset 0 1px 0 var(--glass-highlight) !important;
 }
 
 /* ---- Context Menus / Popovers ---- */
 
 .main-contextMenu-menu {
   position: relative;
-  background: color-mix(in srgb, var(--spice-card, #ffffff) 82%, transparent) !important;
+  background: var(--surface-popover) !important;
   border: 1px solid var(--glass-border) !important;
   border-radius: var(--radius-md) !important;
   box-shadow: 0 8px 24px var(--glass-shadow), inset 0 1px 0 var(--glass-highlight) !important;
-  backdrop-filter: blur(20px) saturate(170%) !important;
+  backdrop-filter: blur(var(--glass-blur-3)) saturate(var(--glass-sat-3)) !important;
   overflow: hidden;
   padding: 6px !important;
 }
@@ -760,18 +822,57 @@ span.SrfZ87xJMiJ7OYEB4Ziz {
   transition: background var(--transition-fast), color var(--transition-fast) !important;
 }
 
-/* Active / keyboard-selected (no hover per design intent) */
+/* Dense list row: pointer tracking in a long menu (spec 5, D1) */
+.main-contextMenu-menuItem:hover {
+  background: var(--row-hover) !important;
+}
+
+/* Focus / keyboard-current / active */
 .main-contextMenu-menuItem:focus,
 .main-contextMenu-menuItem[aria-current="true"],
 .main-contextMenu-menuItem:active {
-  background: rgba(22, 163, 74, 0.08) !important;
-  color: var(--color-accent) !important;
+  background: var(--accent-a08) !important;
+  color: var(--accent) !important;
   outline: none !important;
+}
+
+/* Non-color cue for the keyboard-current row, mirroring the rootlist pattern */
+.main-contextMenu-menuItem[aria-current="true"] {
+  box-shadow: inset 2px 0 0 var(--accent-a75) !important;
 }
 
 .main-contextMenu-divider {
   border-color: var(--glass-border) !important;
   margin: 4px 0 !important;
+}
+
+/* ---- Lyrics Route ---- */
+.lyrics-lyrics-container {
+  --lyrics-color-background: color-mix(in srgb, var(--spice-card) 72%, transparent) !important;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.lyrics-lyrics-background {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--glass-highlight) 30%, transparent), color-mix(in srgb, var(--glass-highlight) 7%, transparent)),
+    var(--lyrics-color-background) !important;
+  backdrop-filter: blur(var(--glass-blur-2)) saturate(var(--glass-sat-2));
+}
+
+/* ---- Headers ---- */
+.main-home-homeHeader {
+  background-color: transparent !important;
+  background: transparent !important;
+}
+.main-home-homeHeader::after {
+  display: none !important;
+}
+.main-home-homeHeaderBackground {
+  display: none !important;
+}
+.main-home-filterChipsSection {
+  --background-base: transparent !important;
 }
 
 /* ── Playlist / Album Action Bar ───────────────── */
@@ -789,41 +890,39 @@ span.SrfZ87xJMiJ7OYEB4Ziz {
   display: none !important;
 }
 
-/* ---- Ambient Background System ---- */
-body {
-  background: linear-gradient(
-    160deg,
-    #f0edf8 0%,
-    #eaf5ef 100%
-  ) !important;
+/* ============================================================
+   5. QUARANTINE
+   ============================================================ */
+
+/* Spotify-internal custom-property overrides. Spotify's own JS calls
+   style.setProperty() on the root element at runtime; only !important
+   can outrank an inline setProperty() call, and targeting `html` here
+   (same element as :root, but not a second :root block) keeps this out
+   of the TOKENS section per spec §10 while still winning the cascade. */
+html {
+  --color-accent: #16a34a !important;
+  --color-accent-hover: #18b34a !important;
+  --color-bg: var(--spice-main, #fafafa) !important;
+  --essential-bright-accent: #16a34a !important;
+  --background-base: color-mix(in srgb, var(--spice-main, #f5f5f7) 65%, transparent) !important;
+  --background-highlight: var(--spice-selected-row, #e5e5ea) !important;
+  --background-elevated-base: color-mix(in srgb, var(--spice-card, #ffffff) 65%, transparent) !important;
+  --shadow-base: none !important;
+  --shadow-elevated: none !important;
+  --shadow-overlay: none !important;
+  --encore-elevated-surface-shadow: none !important;
 }
 
-.Root__top-container {
-  position: relative;
-  background: transparent !important;
-  z-index: 1;
+/* hashed: Your Library panel wrapper — removes default elevation shadow */
+.HFowbNOgNPgtZSE4 {
+  box-shadow: none !important;
+}
+/* hashed: Your Library sticky list header scroll shadow */
+.pH4ZUdfvwTB_sRS_.ubsAl0Z3N0XZgmhy {
+  box-shadow: none !important;
 }
 
-.spice-ambient-blob-1 {
-  position: fixed;
-  top: -80px;
-  left: -80px;
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, rgba(180, 155, 230, 0.75), transparent 70%);
-  filter: blur(80px);
-  z-index: 0;
-  pointer-events: none;
-}
-
-.spice-ambient-blob-2 {
-  position: fixed;
-  bottom: -60px;
-  right: -60px;
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, rgba(22, 163, 74, 0.55), transparent 70%);
-  filter: blur(60px);
-  z-index: 0;
-  pointer-events: none;
+/* hashed: update if filter chips area changes — hides unknown overlay near home filter chips */
+span.SrfZ87xJMiJ7OYEB4Ziz {
+  display: none !important;
 }
