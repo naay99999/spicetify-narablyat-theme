@@ -9,24 +9,28 @@
   --color-border: #ececec;
   --color-text: #111111;
   --color-subtext: #5f5f5f;
-  --color-accent: #16a34a;
-  --color-accent-hover: #18b34a;
+  --color-accent: #c026d3;
+  --color-accent-hover: #d946ef;
 
   /* ---- Layer 2: Semantic ---- */
-  /* Accent ramp — every accent alpha in the file traces to one of these */
-  --accent: var(--spice-accent, #16a34a);
+  /* Accent ramp — every accent alpha in the file traces to one of these.
+     Solid accent comes from color.ini per scheme: #c026d3 light / #e879f9
+     dark (the light value is the darkest step that clears contrast on
+     #fafafa; never use raw --pop-b pink as text on a light ground). */
+  --accent: var(--spice-accent, #c026d3);
   --accent-ink: var(--spice-alt-text, #ffffff);
   --accent-a08: color-mix(in srgb, var(--accent) 8%, transparent);
   --accent-a12: color-mix(in srgb, var(--accent) 12%, transparent);
   --accent-a28: color-mix(in srgb, var(--accent) 28%, transparent);
   --accent-a75: color-mix(in srgb, var(--accent) 75%, transparent);
 
-  /* Pop accent — gradient endpoints + glow core. box-shadow can't render a
-     gradient, so every glow uses --glow-core (the gradient's midpoint). */
-  --pop-a: var(--accent);
-  --pop-b: var(--accent);
+  /* Pop accent — "Neon Orchid" gradient endpoints + glow core. box-shadow
+     can't render a gradient, so every glow uses --glow-core (the gradient's
+     midpoint). Sunset variant: --pop-a: #f97316; --glow-core: #f43f5e. */
+  --pop-a: #a855f7;
+  --pop-b: #ec4899;
   --grad-pop: linear-gradient(135deg, var(--pop-a), var(--pop-b));
-  --glow-core: var(--accent);
+  --glow-core: #d946ef;
 
   /* Surfaces — opaque only; hairline borders separate planes */
   --surface: var(--spice-card, #ffffff);
@@ -786,10 +790,10 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
    (same element as :root, but not a second :root block) keeps this out
    of the TOKENS section while still winning the cascade. */
 html {
-  --color-accent: #16a34a !important;
-  --color-accent-hover: #18b34a !important;
+  --color-accent: #c026d3 !important;
+  --color-accent-hover: #d946ef !important;
   --color-bg: var(--spice-main, #fafafa) !important;
-  --essential-bright-accent: #16a34a !important;
+  --essential-bright-accent: #d946ef !important;
   --background-base: var(--spice-main, #fafafa) !important;
   --background-highlight: var(--spice-selected-row, #e5e5ea) !important;
   --background-elevated-base: var(--spice-card, #ffffff) !important;
