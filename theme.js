@@ -1,4 +1,6 @@
-/* Attach 'liquid glass' classes to Search modal and topbar search */
+/* Attach styling-hook classes to Search modal and topbar search.
+   The spice-glass-* names are legacy hooks kept from the glass era; user.css
+   still targets them, so renaming is tracked as a separate follow-up. */
 (function () {
   const applyGlassEnhancements = () => {
     // Modal overlay + dialog
@@ -45,23 +47,6 @@
   const mo = new MutationObserver(scheduleGlassEnhancements);
   mo.observe(document.documentElement || document.body, { childList: true, subtree: true });
   applyGlassEnhancements();
-})();
-
-(function () {
-  const injectAmbientBlobs = () => {
-    if (!document.querySelector('.spice-ambient-blob-1')) {
-      const b1 = document.createElement('div');
-      b1.className = 'spice-ambient-blob-1';
-      document.body.appendChild(b1);
-    }
-    if (!document.querySelector('.spice-ambient-blob-2')) {
-      const b2 = document.createElement('div');
-      b2.className = 'spice-ambient-blob-2';
-      document.body.appendChild(b2);
-    }
-  };
-
-  injectAmbientBlobs();
 })();
 
 /* Scheme detection (D6): CSS can't know which color_scheme is active, so
