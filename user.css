@@ -655,6 +655,19 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
   border-radius: 50%;
 }
 
+/* Dancing gog-the-alien gif riding the playback progress bar */
+.player-controls .playback-progressbar::before {
+  content: '';
+  position: absolute;
+  bottom: calc(100% + 8px);
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  background-image: url('https://media.tenor.com/QbP7IdKzCKUAAAAj/gog-the-alien-gog.gif');
+  background-size: 32px 32px;
+  image-rendering: pixelated;
+}
+
 /* ---- Cards ---- */
 .main-card-card {
   position: relative;
@@ -847,8 +860,15 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
 }
 
 /* ---- Lyrics Route ---- */
+/* Spotify sets each line's `color` inline via style.setProperty(..., 'important'),
+   which beats any stylesheet !important regardless of specificity - the .lyrics-
+   lyricsContent-active/-lyric color rules below can't out-fight that directly.
+   Overriding the custom properties here instead works: Spotify's own inline
+   `color: var(--lyrics-color-active)` then resolves to our value. */
 .lyrics-lyrics-container {
   --lyrics-color-background: color-mix(in srgb, var(--spice-card) 72%, transparent) !important;
+  --lyrics-color-active: var(--accent) !important;
+  --lyrics-color-inactive: color-mix(in srgb, var(--spice-subtext) 65%, transparent) !important;
   border-radius: var(--radius-md);
   overflow: hidden;
 }
@@ -858,6 +878,86 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
     linear-gradient(180deg, color-mix(in srgb, var(--glass-highlight) 30%, transparent), color-mix(in srgb, var(--glass-highlight) 7%, transparent)),
     var(--lyrics-color-background) !important;
   backdrop-filter: blur(var(--glass-blur-2)) saturate(var(--glass-sat-2));
+}
+
+/* Redundant with the --lyrics-color-active override above (which does the
+   real work) - kept as a fallback in case some render path skips the inline
+   style. */
+.lyrics-lyricsContent-active {
+  color: var(--accent) !important;
+  font-weight: 900;
+  font-size: 1.2em;
+  position: relative;
+}
+
+.lyrics-lyricsContent-lyric,
+.lyrics-lyricsContent-previous,
+.lyrics-lyricsContent-upcoming,
+.lyrics-lyricsContent-provider {
+  color: color-mix(in srgb, var(--lyrics-color-inactive) 50%, var(--spice-subtext) 50%) !important;
+}
+
+/* Non-active lines fade/blur toward the background so focus lands on the
+   active line. Compound selector matches Spotify's own specificity so the
+   native hover-to-seek affordance (:hover on -previous/-upcoming) still wins. */
+.lyrics-lyricsContent-lyric.lyrics-lyricsContent-previous,
+.lyrics-lyricsContent-lyric.lyrics-lyricsContent-upcoming {
+  opacity: 0.55;
+  filter: blur(1px);
+  transition: opacity var(--transition-fast), filter var(--transition-fast);
+}
+
+/* Accent glow anchored behind the active line, same shape as the topbar/
+   search glass glow. Low alpha per accent-is-functional-only rule. */
+.lyrics-lyricsContent-active::before {
+  content: "";
+  position: absolute;
+  inset: -0.3em -1.5em;
+  background: radial-gradient(60% 70% at 50% 50%, var(--accent-a28), transparent 72%);
+  filter: blur(18px);
+  pointer-events: none;
+}
+
+/* Spotify remounts lines as they advance rather than mutating one node, so
+   ordinary class-change transitions can't crossfade. Scroll-driven animation
+   sidesteps that by keying off scroll position instead. Spotify's own
+   view-timeline on .lyrics-lyricsContent-active (higher specificity) wins
+   there and suppresses this animation on the active line - intentional,
+   keeps it sharp; don't raise specificity to force it on. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .lyrics-lyricsContent-lyric {
+      view-timeline: --lyric-line-progress block;
+      animation-name: lyricsLineFocus;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: --lyric-line-progress;
+      animation-range: cover 0% cover 100%;
+    }
+
+    @keyframes lyricsLineFocus {
+      0%, 100% {
+        opacity: 0.4;
+        filter: blur(3px);
+        transform: scale(0.94);
+      }
+      50% {
+        opacity: 1;
+        filter: blur(0);
+        transform: scale(1);
+      }
+    }
+
+    /* Spotify's own higher-specificity rule renames the active line's
+       view-timeline (to its own scroll-to-lyric button timeline), but
+       doesn't touch animation-name/-timeline, so the animation above kept
+       running there against a stray borrowed timeline. Turn it off
+       explicitly so the active line stays untouched. */
+    .lyrics-lyricsContent-lyric.lyrics-lyricsContent-active {
+      animation-name: none;
+      animation-timeline: none;
+    }
+  }
 }
 
 /* ---- Headers ---- */
