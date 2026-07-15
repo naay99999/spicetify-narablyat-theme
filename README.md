@@ -1,6 +1,6 @@
 # narablyat Theme
 
-A Spotify theme for Spicetify with a Liquid Glass design — frosted surfaces, rounded corners, and a forest-green accent. Ships two color schemes: `suudLorLight` (frost white) and `suudLorDark` (dark neutral).
+A Spotify theme for Spicetify with a Clean Pop design — flat platinum surfaces, rounded corners, and a vivid purple-to-pink gradient accent with neon glows at a few focal points. Ships two color schemes: `suudLorLight` (soft platinum) and `suudLorDark` (near-black).
 
 ## Install
 
