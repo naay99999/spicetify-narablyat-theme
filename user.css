@@ -9,28 +9,28 @@
   --color-border: #ececec;
   --color-text: #111111;
   --color-subtext: #5f5f5f;
-  --color-accent: #c026d3;
-  --color-accent-hover: #d946ef;
+  --color-accent: #7c3aed;
+  --color-accent-hover: #8b5cf6;
 
   /* ---- Layer 2: Semantic ---- */
   /* Accent ramp — every accent alpha in the file traces to one of these.
-     Solid accent comes from color.ini per scheme: #c026d3 light / #e879f9
+     Solid accent comes from color.ini per scheme: #7c3aed light / #a78bfa
      dark (the light value is the darkest step that clears contrast on
-     #fafafa; never use raw --pop-b pink as text on a light ground). */
-  --accent: var(--spice-accent, #c026d3);
+     #fafafa; never use raw --pop-b as text on a light ground). */
+  --accent: var(--spice-accent, #7c3aed);
   --accent-ink: var(--spice-alt-text, #ffffff);
   --accent-a08: color-mix(in srgb, var(--accent) 8%, transparent);
   --accent-a12: color-mix(in srgb, var(--accent) 12%, transparent);
   --accent-a28: color-mix(in srgb, var(--accent) 28%, transparent);
   --accent-a75: color-mix(in srgb, var(--accent) 75%, transparent);
 
-  /* Pop accent — "Neon Orchid" gradient endpoints + glow core. box-shadow
-     can't render a gradient, so every glow uses --glow-core (the gradient's
-     midpoint). Sunset variant: --pop-a: #f97316; --glow-core: #f43f5e. */
-  --pop-a: #a855f7;
-  --pop-b: #ec4899;
+  /* Pop accent — "Soft Orchid" gradient endpoints + glow core. box-shadow
+     can't render a gradient, so every glow uses --glow-core — deliberately
+     a softer lavender than the fill so glows read gentle, not neon. */
+  --pop-a: #7c3aed;
+  --pop-b: #a855f7;
   --grad-pop: linear-gradient(135deg, var(--pop-a), var(--pop-b));
-  --glow-core: #d946ef;
+  --glow-core: #a78bfa;
 
   /* Surfaces — opaque only; hairline borders separate planes */
   --surface: var(--spice-card, #ffffff);
@@ -41,10 +41,10 @@
   /* Elevation — 3 levels: flat (no shadow), lift, pop (accent glow) */
   --shadow-lift: 0 2px 12px rgba(17, 17, 17, 0.07);
   --shadow-float: 0 10px 32px rgba(17, 17, 17, 0.12);
-  --glow-pop: 0 6px 20px color-mix(in srgb, var(--glow-core) 45%, transparent);
-  --glow-pop-wide: 0 12px 44px color-mix(in srgb, var(--glow-core) 28%, transparent);
+  --glow-pop: 0 6px 20px color-mix(in srgb, var(--glow-core) 30%, transparent);
+  --glow-pop-wide: 0 12px 44px color-mix(in srgb, var(--glow-core) 16%, transparent);
   --glow-ring: 0 0 0 2px var(--accent),
-    0 0 16px color-mix(in srgb, var(--glow-core) 35%, transparent);
+    0 0 16px color-mix(in srgb, var(--glow-core) 22%, transparent);
 
   /* Radius scale */
   --radius-xs: 8px;
@@ -474,7 +474,7 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
 }
 
 .playback-bar [data-testid="progress-bar-handle"] {
-  box-shadow: 0 0 10px color-mix(in srgb, var(--glow-core) 45%, transparent);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--glow-core) 32%, transparent);
 }
 
 /* Dancing gog-the-alien gif riding the playback progress bar */
@@ -703,7 +703,7 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
   content: "";
   position: absolute;
   inset: -0.3em -1.5em;
-  background: radial-gradient(60% 70% at 50% 50%, color-mix(in srgb, var(--glow-core) 24%, transparent), transparent 72%);
+  background: radial-gradient(60% 70% at 50% 50%, color-mix(in srgb, var(--glow-core) 16%, transparent), transparent 72%);
   filter: blur(18px);
   pointer-events: none;
 }
@@ -790,10 +790,10 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
    (same element as :root, but not a second :root block) keeps this out
    of the TOKENS section while still winning the cascade. */
 html {
-  --color-accent: #c026d3 !important;
-  --color-accent-hover: #d946ef !important;
+  --color-accent: #7c3aed !important;
+  --color-accent-hover: #8b5cf6 !important;
   --color-bg: var(--spice-main, #fafafa) !important;
-  --essential-bright-accent: #d946ef !important;
+  --essential-bright-accent: #8b5cf6 !important;
   --background-base: var(--spice-main, #fafafa) !important;
   --background-highlight: var(--spice-selected-row, #e5e5ea) !important;
   --background-elevated-base: var(--spice-card, #ffffff) !important;

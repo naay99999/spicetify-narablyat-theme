@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What This Is
 
-A Spicetify theme for Spotify called **narablyat**, built around a "Clean Pop" aesthetic: flat platinum surfaces with a vivid purple-to-pink gradient accent and neon glows at a few focal points. There is no build system — changes are applied directly via the Spicetify CLI.
+A Spicetify theme for Spotify called **narablyat**, built around a "Clean Pop" aesthetic: flat platinum surfaces with a soft violet gradient accent and gentle lavender glows at a few focal points. There is no build system — changes are applied directly via the Spicetify CLI.
 
 ## Applying Changes
 
@@ -75,7 +75,7 @@ Every surface is opaque and quiet — solid fill, hairline border, no `backdrop-
 
 Hover is removed everywhere except dense list rows (nav, library rows, context-menu items, search-result options), which get a `--row-hover` background tint for pointer tracking in long lists (D1). Everything else — buttons, cards, chips, surfaces — responds to focus, active, selected, checked, and current states only, never hover.
 
-**Accent is functional only** — the Neon Orchid accent (gradient `#a855f7 → #ec4899`, solid `#c026d3` light / `#e879f9` dark, glow core `#d946ef`) is reserved for active/toggled states, playback progress, and the primary play button. Default tertiary controls and icons stay neutral; do not apply accent color, gradient, or glow broadly. Glows always use `--glow-core` — `box-shadow` cannot render a gradient.
+**Accent is functional only** — the Soft Orchid accent (gradient `#7c3aed → #a855f7`, solid `#7c3aed` light / `#a78bfa` dark, glow core `#a78bfa`) is reserved for active/toggled states, playback progress, and the primary play button. Default tertiary controls and icons stay neutral; do not apply accent color, gradient, or glow broadly. Glows always use `--glow-core` — `box-shadow` cannot render a gradient.
 
 ## CSS Conventions
 

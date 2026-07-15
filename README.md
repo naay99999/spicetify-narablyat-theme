@@ -1,6 +1,6 @@
 # narablyat Theme
 
-A Spotify theme for Spicetify with a Clean Pop design — flat platinum surfaces, rounded corners, and a vivid purple-to-pink gradient accent with neon glows at a few focal points. Ships two color schemes: `suudLorLight` (soft platinum) and `suudLorDark` (near-black).
+A Spotify theme for Spicetify with a Clean Pop design — flat platinum surfaces, rounded corners, and a soft violet gradient accent with gentle glows at a few focal points. Ships two color schemes: `suudLorLight` (soft platinum) and `suudLorDark` (near-black).
 
 ## Install
 

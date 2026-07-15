@@ -26,8 +26,8 @@ Companions: [`redesign-plan.md`](./redesign-plan.md) — the glass → Clean Pop
 | D6 | Scheme detection is done by `theme.js` (luminance of `--spice-main`) stamping `data-scheme="light|dark"` on `<html>`; CSS branches on it. | Accepted |
 | D7 | Only the search modal overlay (`.spice-glass-overlay`) is customized (thin `rgba(0,0,0,.3)` scrim). All other modals keep their default scrim. | Accepted |
 | D9 | Liquid Glass retired: no `backdrop-filter`, no translucent surfaces, no ambient blobs/gradient, no noise overlays. Elevation is expressed with the 3-level shadow scale (§4.4). | Accepted |
-| D10 | Accent is the "Neon Orchid" gradient `#a855f7 → #ec4899`; glows use the midpoint `--glow-core: #d946ef` (box-shadow cannot render a gradient). Solid accent per scheme: `#c026d3` light / `#e879f9` dark. Forest green `#16a34a` is retired everywhere. Sunset variant = swap `--pop-a: #f97316`, `--glow-core: #f43f5e`. | Accepted |
-| D11 | `--pop-b` pink (`#ec4899`) is never used as text/icon color on a light ground (fails contrast); single-color accent contexts always use `--accent` (from `color.ini`). | Accepted |
+| D10 | Accent is the "Soft Orchid" gradient `#7c3aed → #a855f7`; glows use a deliberately softer lavender `--glow-core: #a78bfa` so they read gentle, not neon (box-shadow cannot render a gradient anyway). Solid accent per scheme: `#7c3aed` light / `#a78bfa` dark. Forest green `#16a34a` is retired everywhere. Amended 2026-07-16: the original "Neon Orchid" (`#a855f7 → #ec4899`, glow `#d946ef`) was rejected as too harsh — softened to violet, glow alphas cut ~1/3. | Accepted |
+| D11 | `--pop-b` (`#a855f7`, ~3.8:1 on `#fafafa`) is never used as text/icon color on a light ground; single-color accent contexts always use `--accent` (from `color.ini`). | Accepted |
 | D12 | `spice-glass-*` class names in `theme.js`/`user.css` are legacy hooks kept for stability; renaming to `spice-pop-*` is a separate follow-up, not part of the redesign commits. | Accepted |
 
 Glass-era decisions D2–D4, D8 are retired with the system they governed. To reverse a decision: edit this table, then update the affected tokens/rules in the same commit.
@@ -56,15 +56,15 @@ Layer 3  Component   — only where a component needs a knob (e.g. --search-*). 
 
 | Token | Definition | Use |
 |-------|------------|-----|
-| `--accent` | `var(--spice-accent, #c026d3)` | Solid single-color accent: toggled icons, volume fill, borders, text states |
+| `--accent` | `var(--spice-accent, #7c3aed)` | Solid single-color accent: toggled icons, volume fill, borders, text states |
 | `--accent-ink` | `var(--spice-alt-text, #ffffff)` | Text/icon on solid accent or gradient |
 | `--accent-a08` | `color-mix(in srgb, var(--accent) 8%, transparent)` | Selected/current list-row bg, menu active bg |
 | `--accent-a12` | `color-mix(in srgb, var(--accent) 12%, transparent)` | Selected nav-chip bg |
 | `--accent-a28` | `color-mix(in srgb, var(--accent) 28%, transparent)` | (reserved; ring glow now comes from `--glow-ring`) |
 | `--accent-a75` | `color-mix(in srgb, var(--accent) 75%, transparent)` | Non-color selection/current inset cue (list rows, menu, search results) |
-| `--pop-a` / `--pop-b` | `#a855f7` / `#ec4899` | Gradient endpoints only — never used alone |
+| `--pop-a` / `--pop-b` | `#7c3aed` / `#a855f7` | Gradient endpoints only — never used alone |
 | `--grad-pop` | `linear-gradient(135deg, var(--pop-a), var(--pop-b))` | Fills at pop points (§1.3) |
-| `--glow-core` | `#d946ef` | The only color glows may use |
+| `--glow-core` | `#a78bfa` | The only color glows may use |
 
 No other accent alphas are permitted.
 
@@ -87,7 +87,7 @@ A surface picks a level; shadow values are tokens, never raw in rules:
 |-------|----------|----------|
 | **Flat** | none (hairline only) | Nav bar, right sidebar, resting chips/tabs, search pill at rest |
 | **Lift** | `--shadow-lift` (`0 2px 12px` neutral; dark scheme deeper) | Cards, context menus, dropdowns |
-| **Pop** | `--glow-pop` (`0 6px 20px` @ 45% `--glow-core`), `--glow-pop-wide` (`0 12px 44px` @ 28%), `--glow-ring` (2px ring + 16px glow), `--shadow-float` (`0 10px 32px` neutral, pairs with `--glow-pop-wide` on the player bar) | Pop points only (§1.3) |
+| **Pop** | `--glow-pop` (`0 6px 20px` @ 30% `--glow-core`), `--glow-pop-wide` (`0 12px 44px` @ 16%), `--glow-ring` (2px ring + 16px glow @ 22%), `--shadow-float` (`0 10px 32px` neutral, pairs with `--glow-pop-wide` on the player bar) | Pop points only (§1.3) |
 
 ### 4.4 Radius scale
 
@@ -122,15 +122,15 @@ Empty cell = no styling for that state (intentional). `/* Hover removed */` plac
 
 ## 6. Color System
 
-- **Primitives** live in `color.ini` (`suudLorLight`, `suudLorDark`). Neutral base is unchanged platinum/near-black. Accent rows: light `accent`/`button` = `c026d3`, `button-active` = `d946ef`; dark `accent`/`button` = `e879f9`, `button-active` = `f0a5fb`; both schemes `player-bar-bg` = `d946ef`.
+- **Primitives** live in `color.ini` (`suudLorLight`, `suudLorDark`). Neutral base is unchanged platinum/near-black. Accent rows: light `accent`/`button` = `7c3aed`, `button-active` = `8b5cf6`; dark `accent`/`button` = `a78bfa`, `button-active` = `c4b5fd`; both schemes `player-bar-bg` = `a78bfa`.
 - **Ground** is flat: `body { background: var(--surface-bg) }`. No gradients, blobs, or noise (D9) — a clean field is what makes the glows read.
 - **Lyrics route:** `--lyrics-color-background` overridden to `var(--surface)` (flat, opaque); active line = `--accent`; the active-line radial glow uses `--glow-core` at 24%.
 
 ## 7. Accessibility Baseline
 
 - Body/primary text ≥ 4.5:1 (WCAG AA); large text and UI components/icons ≥ 3:1 against their actual surface.
-- Solid accent on light ground: `#c026d3` on `#fafafa` ≈ 4.6:1 — passes AA for UI and normal text; never substitute `--pop-b` pink (D11).
-- White (`--accent-ink`) on `--grad-pop`: worst case is over `#ec4899` ≈ 3.4:1 — acceptable for large/bold chip text and icons; do not put small body text on the gradient.
+- Solid accent on light ground: `#7c3aed` on `#fafafa` ≈ 5.5:1 — passes AA for UI and normal text; never substitute `--pop-b` (D11).
+- White (`--accent-ink`) on `--grad-pop`: worst case is over `#a855f7` ≈ 4.0:1 — fine for chip text and icons; do not put small body text on the gradient.
 - Selected states: color + non-color cue (§5).
 - `prefers-reduced-motion` respected for all decorative animation (§4.5).
 - Never remove focus visibility; the ring spec in §5 is the minimum.
