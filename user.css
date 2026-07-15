@@ -11,61 +11,38 @@
   --color-subtext: #5f5f5f;
   --color-accent: #16a34a;
   --color-accent-hover: #18b34a;
-  --color-disabled: #d1d1d6;
-  --color-card-shadow: rgba(0, 0, 0, 0.08);
-  --noise-svg: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 
   /* ---- Layer 2: Semantic ---- */
-  /* Accent ramp (spec 4.1) — every accent alpha in the file traces to one of these */
+  /* Accent ramp — every accent alpha in the file traces to one of these */
   --accent: var(--spice-accent, #16a34a);
   --accent-ink: var(--spice-alt-text, #ffffff);
   --accent-a08: color-mix(in srgb, var(--accent) 8%, transparent);
   --accent-a12: color-mix(in srgb, var(--accent) 12%, transparent);
   --accent-a28: color-mix(in srgb, var(--accent) 28%, transparent);
-  --accent-a40: color-mix(in srgb, var(--accent) 40%, transparent); /* decorative blob core only — fails 3:1 as a border, see D8 */
   --accent-a75: color-mix(in srgb, var(--accent) 75%, transparent);
 
-  /* Surfaces (spec 4.2) — opacity encodes prominence, all mix --spice-card */
-  --surface-input: color-mix(in srgb, var(--spice-card, #ffffff) 52%, transparent);
-  --surface-chip: color-mix(in srgb, var(--spice-card, #ffffff) 62%, transparent);
-  --surface-modal: color-mix(in srgb, var(--spice-card, #ffffff) 72%, transparent);
-  --surface-panel: color-mix(in srgb, var(--spice-card, #ffffff) 78%, transparent);
-  --surface-popover: color-mix(in srgb, var(--spice-card, #ffffff) 82%, transparent);
-  --surface-solid: var(--spice-card, #ffffff);
-  --surface-nav: color-mix(in srgb, var(--ambient-lavender-tint) 24%, var(--spice-card, #ffffff));
+  /* Pop accent — gradient endpoints + glow core. box-shadow can't render a
+     gradient, so every glow uses --glow-core (the gradient's midpoint). */
+  --pop-a: var(--accent);
+  --pop-b: var(--accent);
+  --grad-pop: linear-gradient(135deg, var(--pop-a), var(--pop-b));
+  --glow-core: var(--accent);
 
-  /* Ambient background system (spec 6) — light defaults; dark overrides below */
-  --ambient-gradient: linear-gradient(160deg, #f0edf8 0%, #eaf5ef 100%);
-  --ambient-lavender-tint: rgb(230 225 248);
-  --ambient-blob-lavender: rgba(180, 155, 230, 0.75);
-  --ambient-blob-green: rgba(22, 163, 74, 0.55);
-
-  /* Glass chrome (spec 4.3, scheme-branched later) */
-  --glass-overlay-tint: color-mix(in srgb, var(--spice-card, #ffffff) 35%, transparent);
-  --glass-border: rgba(255, 255, 255, 0.40);
-  --glass-highlight: rgba(255, 255, 255, 0.60);
-  --glass-shadow: rgba(0, 0, 0, 0.10);
-  --edge-border: rgba(0, 0, 0, 0.08);
+  /* Surfaces — opaque only; hairline borders separate planes */
+  --surface: var(--spice-card, #ffffff);
+  --surface-bg: var(--spice-main, #fafafa);
+  --hairline: var(--spice-contour, #ececec);
   --row-hover: color-mix(in srgb, var(--spice-text, #111111) 5%, transparent);
-  --glass-ink: rgba(28, 28, 30, 0.72);
-  --glass-ink-hover: rgba(28, 28, 30, 0.86);
-  --glass-ink-border: rgba(255, 255, 255, 0.14);
-  --glass-ink-ring: var(--accent-a28);
-  --glass-ink-fg: #ffffff;
 
-  /* Elevation scale (spec 4.4) — blur/saturate pairs, never a raw px value in rules */
-  --glass-blur-1: 12px;
-  --glass-sat-1: 140%;
-  --glass-blur-2: 16px;
-  --glass-sat-2: 160%;
-  --glass-blur-3: 20px;
-  --glass-sat-3: 170%;
-  --glass-blur-4: 24px;
-  --glass-sat-4: 180%;
-  --glass-blur-5: 30px;
-  --glass-sat-5: 200%;
+  /* Elevation — 3 levels: flat (no shadow), lift, pop (accent glow) */
+  --shadow-lift: 0 2px 12px rgba(17, 17, 17, 0.07);
+  --shadow-float: 0 10px 32px rgba(17, 17, 17, 0.12);
+  --glow-pop: 0 6px 20px color-mix(in srgb, var(--glow-core) 45%, transparent);
+  --glow-pop-wide: 0 12px 44px color-mix(in srgb, var(--glow-core) 28%, transparent);
+  --glow-ring: 0 0 0 2px var(--accent),
+    0 0 16px color-mix(in srgb, var(--glow-core) 35%, transparent);
 
-  /* Radius scale (spec 4.5) */
+  /* Radius scale */
   --radius-xs: 8px;
   --radius-sm: 12px;
   --radius-md: 20px;
@@ -73,21 +50,19 @@
   --radius-xl: 32px;
   --radius-full: 9999px;
 
-  /* Motion (spec 4.6) */
+  /* Motion */
   --transition-fast: 0.15s ease;
   --transition-medium: 0.25s ease;
   --transition-slow: 0.4s ease;
 
   /* ---- Layer 3: Component ---- */
   /* Search bar knobs */
-  --search-bg: var(--surface-input);
-  --search-bg-focus: var(--surface-solid);
-  --search-border: var(--spice-contour, rgba(0, 0, 0, 0.08));
-  --search-ring: var(--accent-a28);
+  --search-bg: var(--surface);
+  --search-border: var(--hairline);
   --search-text: var(--spice-text, var(--color-text));
   --search-subtext: var(--ui-subtext);
   --search-icon: var(--ui-subtext);
-  --search-icon-hover: var(--accent);
+  --search-icon-focus: var(--accent);
 
   /* Spicetify color fallbacks */
   --ui-text: var(--spice-text, var(--color-text));
@@ -97,27 +72,21 @@
   --ui-contour: var(--spice-contour, var(--color-border));
 }
 
-/* Dark-scheme token overrides (spec 4.3/6). theme.js stamps
-   data-scheme on <html> from --spice-main luminance; tokens only, never
-   component rules. */
+/* Dark-scheme token overrides. theme.js stamps data-scheme on <html> from
+   --spice-main luminance; tokens only, never component rules. Glow tokens
+   need no override — saturated color on a dark ground reads stronger as-is. */
 html[data-scheme="dark"] {
-  --glass-border: rgba(255, 255, 255, 0.12);
-  --glass-highlight: rgba(255, 255, 255, 0.10);
-  --glass-shadow: rgba(0, 0, 0, 0.45);
-  --edge-border: rgba(255, 255, 255, 0.08);
-  --ambient-gradient: linear-gradient(160deg, #14121d 0%, #0d1512 100%);
-  --ambient-lavender-tint: rgb(74 62 110);
-  --ambient-blob-lavender: rgba(120, 95, 190, 0.35);
-  --ambient-blob-green: rgba(22, 163, 74, 0.28);
+  --shadow-lift: 0 2px 12px rgba(0, 0, 0, 0.5);
+  --shadow-float: 0 10px 32px rgba(0, 0, 0, 0.6);
 }
 
 /* ============================================================
-   2. AMBIENT / BASE
+   2. BASE
    ============================================================ */
 
-/* ---- Ambient Background System ---- */
+/* Flat ground — a clean field so the pop glows carry all the color */
 body {
-  background: var(--ambient-gradient) !important;
+  background: var(--surface-bg) !important;
 }
 
 .Root__top-container {
@@ -126,52 +95,14 @@ body {
   z-index: 1;
 }
 
-.spice-ambient-blob-1 {
-  position: fixed;
-  top: -80px;
-  left: -80px;
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, var(--ambient-blob-lavender), transparent 70%);
-  filter: blur(80px);
-  z-index: 0;
-  pointer-events: none;
-}
-
-.spice-ambient-blob-2 {
-  position: fixed;
-  bottom: -60px;
-  right: -60px;
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, var(--ambient-blob-green), transparent 70%);
-  filter: blur(60px);
-  z-index: 0;
-  pointer-events: none;
-}
-
 /* ============================================================
    3. LAYOUT ROOTS
    ============================================================ */
 
 /* ---- Nav Bar ---- */
 .Root__nav-bar {
-  position: relative;
-  background: var(--surface-nav) !important;
-  border-right: 1px solid var(--edge-border) !important;
-  backdrop-filter: blur(var(--glass-blur-1)) saturate(var(--glass-sat-1)) !important;
-}
-
-.Root__nav-bar::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 0;
-  background-image: var(--noise-svg);
-  background-size: 180px 180px;
-  opacity: 0.038;
-  mix-blend-mode: overlay;
-  pointer-events: none;
+  background: var(--surface-bg) !important;
+  border-right: 1px solid var(--hairline) !important;
 }
 
 /* Clearance for floating player bar */
@@ -182,75 +113,40 @@ body {
 /* ---- Right Sidebar Panel ---- */
 .Root__right-sidebar,
 [data-testid="right-sidebar"] {
-  /* 60% (not 58%) keeps light-scheme contrast vs --surface-panel at ~4.9:1, comfortably over AA 4.5:1 */
+  /* 60% keeps light-scheme subdued text at ~4.9:1 on the solid card
+     surface, comfortably over AA 4.5:1 */
   --text-subdued: color-mix(in srgb, var(--ui-text) 60%, transparent);
-  position: relative;
-  background: var(--surface-panel) !important;
-  border-left: 1px solid var(--edge-border) !important;
-  box-shadow: -6px 0 18px color-mix(in srgb, var(--edge-border) 75%, transparent) !important;
-  backdrop-filter: blur(var(--glass-blur-2)) saturate(var(--glass-sat-2)) !important;
+  background: var(--surface) !important;
+  border-left: 1px solid var(--hairline) !important;
+  box-shadow: none !important;
 }
 
-.Root__right-sidebar::after,
-[data-testid="right-sidebar"]::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: var(--noise-svg);
-  background-size: 180px 180px;
-  opacity: 0.038;
-  mix-blend-mode: overlay;
-  pointer-events: none;
-}
-
-/* Playing Bar — Floating Liquid Glass */
+/* Playing Bar — floating, the theme's signature pop element */
 .Root__now-playing-bar {
   position: fixed !important;
   bottom: 16px !important;
   left: 16px !important;
   right: 16px !important;
   border-radius: var(--radius-lg) !important;
-  background: var(--surface-modal) !important;
-  border: 1px solid var(--glass-highlight) !important;
-  box-shadow:
-    0 10px 32px var(--glass-shadow),
-    inset 0 1px 0 var(--glass-highlight) !important;
-  backdrop-filter: blur(var(--glass-blur-5)) saturate(var(--glass-sat-5)) !important;
-  transition: background var(--transition-medium), box-shadow var(--transition-medium) !important;
+  background: var(--surface) !important;
+  border: 1px solid var(--hairline) !important;
+  box-shadow: var(--shadow-float), var(--glow-pop-wide) !important;
+  transition: box-shadow var(--transition-medium) !important;
   overflow: hidden !important;
   z-index: 100 !important;
 }
 
-/* Diagonal shimmer streak */
+/* 1px gradient hairline along the top edge — the quiet signature detail */
 .Root__now-playing-bar::before {
   content: "";
   position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: linear-gradient(
-    105deg,
-    transparent 30%,
-    color-mix(in srgb, var(--glass-highlight) 75%, transparent) 50%,
-    transparent 70%
-  );
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--grad-pop);
   pointer-events: none;
-  z-index: 0;
-}
-
-/* Note: topbar (.spice-glass-topbar) and dialog (.spice-glass-dialog) intentionally
-   have no noise ::after — both ::before and ::after are already used for their
-   highlight and accent blob effects, leaving no pseudo-element slot. */
-.Root__now-playing-bar::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background-image: var(--noise-svg);
-  background-size: 180px 180px;
-  opacity: 0.038;
-  mix-blend-mode: overlay;
-  pointer-events: none;
-  z-index: 0;
+  z-index: 1;
 }
 
 /* ============================================================
@@ -259,59 +155,30 @@ body {
 
 /* ---- Search: Topbar ---- */
 
-/* Topbar Search: Liquid Glass pill */
+/* Topbar Search: clean pill. Class name .spice-glass-topbar is a legacy hook
+   kept from the glass era — theme.js still stamps it; rename tracked separately. */
 .spice-glass-topbar {
   background: var(--search-bg) !important;
-  border: 1px solid var(--glass-border) !important;
+  border: 1px solid var(--search-border) !important;
   border-radius: var(--radius-full) !important;
-  box-shadow: 0 8px 24px var(--glass-shadow), inset 0 1px 0 var(--glass-highlight) !important;
-  backdrop-filter: blur(var(--glass-blur-4)) saturate(var(--glass-sat-4)) !important;
-  transition: background var(--transition-medium),
-    border-color var(--transition-fast),
-    box-shadow var(--transition-medium),
-    transform var(--transition-fast) !important;
-  position: relative;
-  overflow: hidden;
+  box-shadow: none !important;
+  transition: border-color var(--transition-fast),
+    box-shadow var(--transition-medium) !important;
 }
 
 .spice-glass-topbar:focus-within {
-  background: var(--search-bg-focus) !important;
   border-color: var(--accent) !important;
-  box-shadow: 0 0 0 3px var(--glass-ink-ring), 0 12px 32px var(--glass-shadow) !important;
-  transform: translateY(-1px);
+  box-shadow: var(--glow-ring) !important;
 }
 
-.spice-glass-topbar::before {
-  content: "";
-  position: absolute;
-  inset: -20% -10% auto -10%;
-  height: 80%;
-  background: linear-gradient(180deg, var(--glass-highlight), color-mix(in srgb, var(--glass-highlight) 25%, transparent) 70%, transparent);
-  filter: blur(14px);
-  pointer-events: none;
-}
-
-.spice-glass-topbar::after {
-  content: "";
-  position: absolute;
-  right: -25%;
-  bottom: -60%;
-  width: 60%;
-  height: 160%;
-  background: radial-gradient(60% 50% at 40% 35%, var(--accent-a28), transparent 70%);
-  filter: blur(18px);
-  opacity: 0.9;
-  pointer-events: none;
-}
-
-/* Input text within topbar glass */
+/* Input text within topbar pill */
 .spice-glass-topbar .x-searchInput-searchInputInput,
 .spice-glass-topbar input[type="search"] {
   background: transparent !important;
   color: var(--search-text) !important;
 }
 
-/* Leading icon + trailing chips inside topbar */
+/* Leading icon: neutral at rest, accent on focus (no hover states) */
 .spice-glass-topbar .e-91000-form-input-icon__icon--leading svg,
 .spice-glass-topbar .x-searchInput-searchInputSearchIcon {
   color: var(--search-icon) !important;
@@ -322,36 +189,34 @@ body {
 .spice-glass-topbar:focus-within .e-91000-form-input-icon__icon--leading svg,
 .spice-glass-topbar:focus-within .x-searchInput-searchInputSearchIcon {
   transform: scale(1.06);
-  color: var(--search-icon-hover) !important;
-  fill: var(--search-icon-hover) !important;
+  color: var(--search-icon-focus) !important;
+  fill: var(--search-icon-focus) !important;
 }
 
 .spice-glass-topbar .x-searchInput-searchInputClearButton {
-  background: color-mix(in srgb, var(--edge-border) 50%, transparent) !important;
-  border: 1px solid color-mix(in srgb, var(--glass-highlight) 30%, transparent) !important;
+  background: transparent !important;
+  border: none !important;
   border-radius: var(--radius-full) !important;
   color: var(--search-icon) !important;
-  transition: background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast) !important;
+  transition: color var(--transition-fast) !important;
 }
 
 /* Home nav chip in the same container */
 .main-globalNav-searchContainer .main-globalNav-navLink {
-  background: color-mix(in srgb, var(--edge-border) 50%, transparent) !important;
-  border: 1px solid color-mix(in srgb, var(--glass-highlight) 30%, transparent) !important;
+  background: var(--surface) !important;
+  border: 1px solid var(--hairline) !important;
   border-radius: var(--radius-full) !important;
-  transition: background var(--transition-fast), transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast) !important;
+  transition: background var(--transition-fast), border-color var(--transition-fast) !important;
 }
 
 .main-globalNav-searchContainer .main-globalNav-navLink.main-globalNav-navLinkActive {
   background: var(--accent-a12) !important;
-  /* solid --accent, not --accent-a40: a40 only reads ~1.6-1.9:1 against this
-     glass surface, short of the 3:1 non-text target (spec D8) */
   border-color: var(--accent) !important;
 }
 
 /* theme.js adds .spice-glass-topbar to this same element, which owns all
-   container-level styling (background/border/blur/shadow/lift). Rules below
-   are internals only — input text, placeholder, icons, clear button. */
+   container-level styling (background/border/shadow). Rules below are
+   internals only — input text, placeholder, icons, clear button. */
 
 /* Input: text + placeholder */
 .main-globalNav-searchInputContainer .x-searchInput-searchInputInput,
@@ -366,14 +231,7 @@ body {
 .main-globalNav-searchInputContainer .x-searchInput-searchInputInput::placeholder,
 .main-globalNav-searchInputContainer input::placeholder {
   color: var(--search-subtext) !important;
-  /* 0.94 (not 0.8): the topbar's resting background is --surface-input (52% card
-     mix, the most transparent surface in the file), so placeholder text has the
-     least surface backing of anything in the theme; the extra headroom keeps it
-     clear of the 4.5:1 AA target across the ambient-blur range in both schemes */
-  opacity: 0.94 !important;
 }
-
-/* Overlay placeholder: handled by ::placeholder pseudo-element above */
 
 /* Leading search icon */
 .main-globalNav-searchInputContainer .x-searchInput-searchInputSearchIcon,
@@ -386,7 +244,7 @@ body {
 .main-globalNav-searchInputContainer:focus-within .x-searchInput-searchInputSearchIcon,
 .main-globalNav-searchInputContainer:focus-within .e-91000-form-input-icon__icon--leading svg {
   transform: scale(1.05);
-  fill: var(--search-icon-hover) !important;
+  fill: var(--search-icon-focus) !important;
 }
 
 /* Trailing buttons: clear + browse */
@@ -394,7 +252,7 @@ body {
   background: transparent !important;
   border-radius: var(--radius-full) !important;
   color: var(--search-icon) !important;
-  transition: background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast) !important;
+  transition: color var(--transition-fast) !important;
 }
 
 .main-globalNav-searchInputContainer .x-searchInput-searchInputClearButton svg {
@@ -403,98 +261,52 @@ body {
 
 /* ---- Search: Modal ---- */
 
-/* Overlay blur and tint when search modal is open */
+/* Thin opaque scrim — no blur */
 .spice-glass-overlay.GenericModal__overlay {
-  background: transparent !important;
+  background: rgba(0, 0, 0, 0.3) !important;
 }
 
 /* The dialog card */
 .spice-glass-dialog[role="dialog"][aria-label="Search"] {
-  position: relative;
-  background: var(--surface-modal) !important;
-  border: 1px solid var(--glass-border) !important;
+  background: var(--surface) !important;
+  border: 1px solid var(--hairline) !important;
   border-radius: var(--radius-lg) !important;
-  box-shadow: 0 20px 40px var(--glass-shadow), inset 0 1px 0 var(--glass-highlight) !important;
-  backdrop-filter: blur(var(--glass-blur-4)) saturate(var(--glass-sat-4)) !important;
+  box-shadow: var(--shadow-float) !important;
   overflow: hidden;
   margin: 6vh auto !important;
 }
 
-.spice-glass-dialog[role="dialog"][aria-label="Search"]::before {
-  content: "";
-  position: absolute;
-  top: -25%;
-  left: -10%;
-  width: 60%;
-  height: 60%;
-  background: radial-gradient(55% 55% at 30% 30%, var(--glass-highlight) 0%, color-mix(in srgb, var(--glass-highlight) 25%, transparent) 100%);
-  filter: blur(14px);
-  pointer-events: none;
-}
-
-.spice-glass-dialog[role="dialog"][aria-label="Search"]::after {
-  content: "";
-  position: absolute;
-  right: -15%;
-  bottom: -20%;
-  width: 50%;
-  height: 50%;
-  background: radial-gradient(60% 65% at 40% 35%, var(--accent-a40) 0%, var(--accent-a12) 50%, transparent 100%);
-  filter: blur(18px);
-  opacity: 0.85;
-  pointer-events: none;
-}
-
-/* Decorative drift only; skipped entirely under prefers-reduced-motion (spec 4.6) */
-@media (prefers-reduced-motion: no-preference) {
-  .spice-glass-dialog[role="dialog"][aria-label="Search"]::after {
-    animation: glassBlob 12s ease-in-out infinite alternate;
-  }
-
-  @keyframes glassBlob {
-    0% {
-      transform: translate(0, 0) scale(1);
-    }
-
-    100% {
-      transform: translate(-6%, -4%) scale(1.06);
-    }
-  }
-}
-
 /* Search input pill inside modal */
 .spice-glass-dialog .spice-glass-inputWrap {
-  background: var(--glass-ink) !important;
-  border: 1px solid var(--glass-ink-border) !important;
+  background: color-mix(in srgb, var(--spice-text, #111111) 5%, transparent) !important;
+  border: 1px solid var(--hairline) !important;
   border-radius: var(--radius-full) !important;
   padding: 8px 12px !important;
   display: flex;
   align-items: center;
   gap: 10px;
-  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--glass-ink-border) 43%, transparent);
-  transition: background var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast) !important;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast) !important;
 }
 
 .spice-glass-dialog .spice-glass-inputWrap:focus-within {
   border-color: var(--accent) !important;
-  box-shadow: 0 0 0 3px var(--glass-ink-ring) !important;
+  box-shadow: var(--glow-ring) !important;
 }
 
 .spice-glass-dialog .spice-glass-inputWrap svg {
-  color: var(--glass-ink-fg);
-  fill: var(--glass-ink-fg);
-  opacity: 0.9;
+  color: var(--ui-subtext);
+  fill: var(--ui-subtext);
 }
 
 .spice-glass-dialog [data-testid="search-modal-input"] {
   background: transparent !important;
-  color: var(--glass-ink-fg) !important;
+  color: var(--ui-text) !important;
   outline: none !important;
   border: none !important;
   box-shadow: none !important;
 }
 
-/* Results list + row hover */
+/* Results list */
 .spice-glass-dialog #search-modal-listbox {
   background: transparent !important;
 }
@@ -503,14 +315,14 @@ body {
   border-radius: var(--radius-sm);
 }
 
-/* Dense list row: pointer tracking in a long results list (spec 5, D1) */
+/* Dense list row: pointer tracking in a long results list (D1) */
 .spice-glass-dialog [role="option"]:hover {
   background: var(--row-hover) !important;
 }
 
 .spice-glass-dialog [role="option"][aria-selected="true"] {
   background: var(--accent-a08) !important;
-  /* Non-color cue alongside the bg tint (spec 5 non-color signal rule) */
+  /* Non-color cue alongside the bg tint (non-color signal rule) */
   box-shadow: inset 2px 0 0 var(--accent-a75) !important;
 }
 
@@ -526,11 +338,10 @@ body {
 
 /* Dropdown panel styling */
 #search-dropdown {
-  background: var(--search-bg-focus) !important;
-  border: 1px solid var(--search-border) !important;
+  background: var(--surface) !important;
+  border: 1px solid var(--hairline) !important;
   border-radius: var(--radius-lg) !important;
-  box-shadow: 0 12px 28px var(--glass-shadow) !important;
-  backdrop-filter: blur(var(--glass-blur-3)) saturate(var(--glass-sat-3)) !important;
+  box-shadow: var(--shadow-lift) !important;
   overflow: hidden !important;
 }
 
@@ -579,20 +390,22 @@ body {
   color: var(--ui-accent) !important;
 }
 
-/* Primary play/pause — broadened for Spotify selector drift */
+/* Primary play/pause — pop point: gradient fill + glow.
+   background-color stays as the solid fallback under the gradient image. */
 [data-testid="control-button-playpause"],
 [data-testid="control-button-playpause"] > button,
 [data-testid="control-button-playpause"] button[class*="Button"] {
-  background: var(--ui-accent) !important;
+  background: var(--grad-pop) !important;
   background-color: var(--ui-accent) !important;
   color: var(--accent-ink) !important;
   border-radius: var(--radius-full) !important;
-  transition: background-color var(--transition-fast), transform var(--transition-fast);
+  box-shadow: var(--glow-pop) !important;
+  transition: box-shadow var(--transition-fast), transform var(--transition-fast);
 }
 
 [data-testid="control-button-playpause"]:active,
 [data-testid="control-button-playpause"] > button:active {
-  transform: scale(0.98);
+  transform: scale(0.96);
 }
 
 /* Liked Songs toggled */
@@ -633,26 +446,31 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
   border-radius: var(--radius-full);
 }
 
-/* Fill */
+/* Fill — playback gets the gradient (pop point); volume stays solid so it
+   doesn't compete with the progress bar */
 .playback-bar [data-testid="progress-bar"] [data-testid="progress-bar-background"]>div:nth-child(2)>div {
-  background-color: var(--ui-accent) !important;
+  background: var(--grad-pop) !important;
   height: 6px;
   border-radius: var(--radius-full);
 }
 
 .volume-bar [data-testid="progress-bar"] [data-testid="progress-bar-background"]>div:nth-child(2)>div {
-  background-color: var(--accent-a75);
+  background-color: var(--ui-accent);
   height: 6px;
   border-radius: var(--radius-full);
 }
 
-/* Handle (no borders) */
+/* Handle — small glow on the playback handle only */
 .playback-bar [data-testid="progress-bar-handle"],
 .volume-bar [data-testid="progress-bar-handle"] {
   width: 12px;
   height: 12px;
   background-color: var(--ui-accent);
   border-radius: 50%;
+}
+
+.playback-bar [data-testid="progress-bar-handle"] {
+  box-shadow: 0 0 10px color-mix(in srgb, var(--glow-core) 45%, transparent);
 }
 
 /* Dancing gog-the-alien gif riding the playback progress bar */
@@ -670,31 +488,17 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
 
 /* ---- Cards ---- */
 .main-card-card {
-  position: relative;
-  background: color-mix(in srgb, var(--ambient-lavender-tint) 8%, var(--surface-solid)) !important;
-  border: 1px solid var(--glass-border) !important;
+  background: var(--surface) !important;
+  border: 1px solid var(--hairline) !important;
   border-radius: var(--radius-md) !important;
-  box-shadow: 0 2px 8px var(--glass-shadow), inset 0 1px 0 var(--glass-highlight) !important;
-  backdrop-filter: blur(var(--glass-blur-2)) saturate(var(--glass-sat-2)) !important;
+  box-shadow: var(--shadow-lift) !important;
   transition: box-shadow var(--transition-fast), transform var(--transition-fast) !important;
   overflow: hidden;
 }
 
-.main-card-card::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background-image: var(--noise-svg);
-  background-size: 180px 180px;
-  opacity: 0.038;
-  mix-blend-mode: overlay;
-  pointer-events: none;
-}
-
 .main-card-card:active {
   transform: scale(0.98);
-  box-shadow: 0 1px 4px var(--glass-shadow) !important;
+  box-shadow: none !important;
 }
 
 .main-card-card .main-cardImage-imageWrapper {
@@ -722,7 +526,7 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
 .main-navBar-navBar .main-navBar-navBarItem.main-navBar-navBarItemActive {
   background: var(--accent-a08) !important;
   color: var(--ui-accent) !important;
-  /* Non-color cue alongside the bg tint (spec 5 non-color signal rule),
+  /* Non-color cue alongside the bg tint (non-color signal rule),
      matching the rootlist/context-menu/search-modal selected-row pattern */
   box-shadow: inset 2px 0 0 var(--accent-a75) !important;
 }
@@ -737,7 +541,7 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
 
 .main-rootlist-wrapper .main-rootlist-rootlistItem[aria-selected="true"] {
   background: var(--accent-a08) !important;
-  /* Non-color cue alongside the bg tint (spec 5 non-color signal rule) */
+  /* Non-color cue alongside the bg tint (non-color signal rule) */
   box-shadow: inset 2px 0 0 var(--accent-a75) !important;
 }
 
@@ -748,15 +552,16 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
 }
 
 /* ---- Chips / Tabs ---- */
+/* Resting chips are flat: solid surface + hairline, no shadow. Selected
+   chips are a pop point: gradient fill, inverted ink, short glow. */
 .main-home-filterChipsSection [role="tab"],
 .main-home-filterChipsSection button[class*="chip"],
 .main-home-filterChipsSection [class*="filterChip"] {
-  background: var(--surface-chip) !important;
-  border: 1px solid var(--glass-border) !important;
+  background: var(--surface) !important;
+  border: 1px solid var(--hairline) !important;
   border-radius: var(--radius-full) !important;
-  backdrop-filter: blur(var(--glass-blur-1)) saturate(var(--glass-sat-1)) !important;
-  box-shadow: 0 2px 8px color-mix(in srgb, var(--edge-border) 75%, transparent), inset 0 1px 0 var(--glass-highlight) !important;
-  transition: background var(--transition-fast), box-shadow var(--transition-fast) !important;
+  box-shadow: none !important;
+  transition: background var(--transition-fast), box-shadow var(--transition-fast), color var(--transition-fast) !important;
 }
 
 .main-home-filterChipsSection [role="tab"][aria-selected="true"],
@@ -767,17 +572,16 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
 .main-home-filterChipsSection [class*="filterChip"][aria-checked="true"],
 .main-home-filterChipsSection .e-10451-legacy-chip--selected,
 [data-encore-id="chip"][aria-checked="true"] {
-  background: var(--accent-a12) !important;
-  /* solid --accent, not --accent-a40: a40 only reads ~1.6-1.9:1 against
-     --surface-chip, short of the 3:1 non-text target (spec D8) */
-  border-color: var(--accent) !important;
-  box-shadow: 0 2px 8px var(--accent-a12), inset 0 1px 0 var(--glass-highlight) !important;
+  background: var(--grad-pop) !important;
+  border-color: transparent !important;
+  color: var(--accent-ink) !important;
+  box-shadow: var(--glow-pop) !important;
 }
 
-/* prevent encore's color inversion inside selected chips */
+/* keep encore's inner spans on the gradient's inverted ink */
 [data-encore-id="chip"][aria-checked="true"] .encore-inverted-light-set,
 .e-10451-legacy-chip--selected .e-10451-legacy-chip__inner {
-  color: var(--accent) !important;
+  color: var(--accent-ink) !important;
   background: transparent !important;
 }
 
@@ -786,48 +590,32 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
 [data-testid="search-filters"] [role="tab"],
 [class*="searchCategoryFilter"] [role="tab"],
 .main-entityNavigationTabBar-tabBar [role="tab"] {
-  background: var(--surface-chip) !important;
-  border: 1px solid var(--glass-border) !important;
+  background: var(--surface) !important;
+  border: 1px solid var(--hairline) !important;
   border-radius: var(--radius-full) !important;
-  backdrop-filter: blur(var(--glass-blur-1)) saturate(var(--glass-sat-1)) !important;
-  box-shadow: 0 2px 8px color-mix(in srgb, var(--edge-border) 75%, transparent), inset 0 1px 0 var(--glass-highlight) !important;
-  transition: background var(--transition-fast), box-shadow var(--transition-fast) !important;
+  box-shadow: none !important;
+  transition: background var(--transition-fast), box-shadow var(--transition-fast), color var(--transition-fast) !important;
 }
 
 .main-shelf-shelf [role="tablist"] [role="tab"][aria-selected="true"],
 [data-testid="search-filters"] [role="tab"][aria-selected="true"],
 [class*="searchCategoryFilter"] [role="tab"][aria-selected="true"],
 .main-entityNavigationTabBar-tabBar [role="tab"][aria-selected="true"] {
-  background: var(--accent-a12) !important;
-  /* solid --accent, not --accent-a40: a40 only reads ~1.6-1.9:1 against
-     --surface-chip, short of the 3:1 non-text target (spec D8) */
-  border-color: var(--accent) !important;
-  box-shadow: 0 2px 8px var(--accent-a12), inset 0 1px 0 var(--glass-highlight) !important;
+  background: var(--grad-pop) !important;
+  border-color: transparent !important;
+  color: var(--accent-ink) !important;
+  box-shadow: var(--glow-pop) !important;
 }
 
 /* ---- Context Menus / Popovers ---- */
 
 .main-contextMenu-menu {
-  position: relative;
-  background: var(--surface-popover) !important;
-  border: 1px solid var(--glass-border) !important;
+  background: var(--surface) !important;
+  border: 1px solid var(--hairline) !important;
   border-radius: var(--radius-md) !important;
-  box-shadow: 0 8px 24px var(--glass-shadow), inset 0 1px 0 var(--glass-highlight) !important;
-  backdrop-filter: blur(var(--glass-blur-3)) saturate(var(--glass-sat-3)) !important;
+  box-shadow: var(--shadow-lift) !important;
   overflow: hidden;
   padding: 6px !important;
-}
-
-.main-contextMenu-menu::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background-image: var(--noise-svg);
-  background-size: 180px 180px;
-  opacity: 0.038;
-  mix-blend-mode: overlay;
-  pointer-events: none;
 }
 
 .main-contextMenu-menuItem {
@@ -835,7 +623,7 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
   transition: background var(--transition-fast), color var(--transition-fast) !important;
 }
 
-/* Dense list row: pointer tracking in a long menu (spec 5, D1) */
+/* Dense list row: pointer tracking in a long menu (D1) */
 .main-contextMenu-menuItem:hover {
   background: var(--row-hover) !important;
 }
@@ -855,7 +643,7 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
 }
 
 .main-contextMenu-divider {
-  border-color: var(--glass-border) !important;
+  border-color: var(--hairline) !important;
   margin: 4px 0 !important;
 }
 
@@ -866,18 +654,16 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
    Overriding the custom properties here instead works: Spotify's own inline
    `color: var(--lyrics-color-active)` then resolves to our value. */
 .lyrics-lyrics-container {
-  --lyrics-color-background: color-mix(in srgb, var(--spice-card) 72%, transparent) !important;
+  --lyrics-color-background: var(--surface) !important;
   --lyrics-color-active: var(--accent) !important;
   --lyrics-color-inactive: color-mix(in srgb, var(--spice-subtext) 65%, transparent) !important;
   border-radius: var(--radius-md);
   overflow: hidden;
 }
 
+/* Flat opaque ground — no album-color block, no blur */
 .lyrics-lyrics-background {
-  background:
-    linear-gradient(180deg, color-mix(in srgb, var(--glass-highlight) 30%, transparent), color-mix(in srgb, var(--glass-highlight) 7%, transparent)),
-    var(--lyrics-color-background) !important;
-  backdrop-filter: blur(var(--glass-blur-2)) saturate(var(--glass-sat-2));
+  background: var(--lyrics-color-background) !important;
 }
 
 /* Redundant with the --lyrics-color-active override above (which does the
@@ -907,13 +693,13 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
   transition: opacity var(--transition-fast), filter var(--transition-fast);
 }
 
-/* Accent glow anchored behind the active line, same shape as the topbar/
-   search glass glow. Low alpha per accent-is-functional-only rule. */
+/* Soft glow anchored behind the active line — bonus pop point, kept low
+   alpha per the accent-is-functional-only rule. */
 .lyrics-lyricsContent-active::before {
   content: "";
   position: absolute;
   inset: -0.3em -1.5em;
-  background: radial-gradient(60% 70% at 50% 50%, var(--accent-a28), transparent 72%);
+  background: radial-gradient(60% 70% at 50% 50%, color-mix(in srgb, var(--glow-core) 24%, transparent), transparent 72%);
   filter: blur(18px);
   pointer-events: none;
 }
@@ -998,15 +784,15 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
    style.setProperty() on the root element at runtime; only !important
    can outrank an inline setProperty() call, and targeting `html` here
    (same element as :root, but not a second :root block) keeps this out
-   of the TOKENS section per spec §10 while still winning the cascade. */
+   of the TOKENS section while still winning the cascade. */
 html {
   --color-accent: #16a34a !important;
   --color-accent-hover: #18b34a !important;
   --color-bg: var(--spice-main, #fafafa) !important;
   --essential-bright-accent: #16a34a !important;
-  --background-base: color-mix(in srgb, var(--spice-main, #f5f5f7) 65%, transparent) !important;
+  --background-base: var(--spice-main, #fafafa) !important;
   --background-highlight: var(--spice-selected-row, #e5e5ea) !important;
-  --background-elevated-base: color-mix(in srgb, var(--spice-card, #ffffff) 65%, transparent) !important;
+  --background-elevated-base: var(--spice-card, #ffffff) !important;
   --shadow-base: none !important;
   --shadow-elevated: none !important;
   --shadow-overlay: none !important;
