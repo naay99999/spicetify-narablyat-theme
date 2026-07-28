@@ -125,13 +125,16 @@ body {
   box-shadow: none !important;
 }
 
-/* Playing Bar — floating, the theme's signature pop element */
-.Root__now-playing-bar {
+/* Playing Bar — floating, the theme's signature pop element.
+   Targets data-testid, not a class: Spotify dropped the .Root__now-playing-bar
+   class from this element in a recent build. */
+[data-testid="now-playing-bar"] {
   position: fixed !important;
   bottom: 16px !important;
   left: 16px !important;
   right: 16px !important;
-  border-radius: var(--radius-lg) !important;
+  padding: 4px !important;
+  border-radius: var(--radius-md) !important;
   background: var(--surface) !important;
   border: 1px solid var(--hairline) !important;
   box-shadow: var(--shadow-float), var(--glow-pop-wide) !important;
@@ -140,17 +143,8 @@ body {
   z-index: 100 !important;
 }
 
-/* 1px gradient hairline along the top edge — the quiet signature detail */
-.Root__now-playing-bar::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: var(--grad-pop);
-  pointer-events: none;
-  z-index: 1;
+.main-nowPlayingWidget-coverArtContainer {
+  border-radius: 8px !important;
 }
 
 /* ============================================================
@@ -435,16 +429,21 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
   justify-content: center !important;
 }
 
-/* ---- Progress & Volume Bars (Only) ---- */
+/* ---- Progress & Volume Bars (Only) ----
+   Ancestors are matched by data-testid, not class: .playback-bar and
+   .volume-bar classes no longer exist on these elements. The rail's
+   [data-testid="progress-bar-background"] now wraps an extra leading
+   (empty) tooltip-anchor div before the fill/hover-preview divs, so the
+   fill is targeted at nth-child(2), not first-child. */
 /* Round rails */
-.playback-bar [data-testid="progress-bar"],
-.volume-bar [data-testid="progress-bar"] {
+[data-testid="playback-progressbar"] [data-testid="progress-bar"],
+[data-testid="volume-bar"] [data-testid="progress-bar"] {
   border-radius: var(--radius-full);
 }
 
 /* Rail background */
-.playback-bar [data-testid="progress-bar"] [data-testid="progress-bar-background"]>div:first-child>div,
-.volume-bar [data-testid="progress-bar"] [data-testid="progress-bar-background"]>div:first-child>div {
+[data-testid="playback-progressbar"] [data-testid="progress-bar-background"],
+[data-testid="volume-bar"] [data-testid="progress-bar-background"] {
   background-color: var(--ui-contour) !important;
   height: 6px;
   border-radius: var(--radius-full);
@@ -452,33 +451,33 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
 
 /* Fill — playback gets the gradient (pop point); volume stays solid so it
    doesn't compete with the progress bar */
-.playback-bar [data-testid="progress-bar"] [data-testid="progress-bar-background"]>div:nth-child(2)>div {
+[data-testid="playback-progressbar"] [data-testid="progress-bar-background"]>div:nth-child(2)>div {
   background: var(--grad-pop) !important;
   height: 6px;
   border-radius: var(--radius-full);
 }
 
-.volume-bar [data-testid="progress-bar"] [data-testid="progress-bar-background"]>div:nth-child(2)>div {
+[data-testid="volume-bar"] [data-testid="progress-bar-background"]>div:nth-child(2)>div {
   background-color: var(--ui-accent);
   height: 6px;
   border-radius: var(--radius-full);
 }
 
 /* Handle — small glow on the playback handle only */
-.playback-bar [data-testid="progress-bar-handle"],
-.volume-bar [data-testid="progress-bar-handle"] {
+[data-testid="playback-progressbar"] [data-testid="progress-bar-handle"],
+[data-testid="volume-bar"] [data-testid="progress-bar-handle"] {
   width: 12px;
   height: 12px;
   background-color: var(--ui-accent);
   border-radius: 50%;
 }
 
-.playback-bar [data-testid="progress-bar-handle"] {
+[data-testid="playback-progressbar"] [data-testid="progress-bar-handle"] {
   box-shadow: 0 0 10px color-mix(in srgb, var(--glow-core) 32%, transparent);
 }
 
 /* Dancing gog-the-alien gif riding the playback progress bar */
-.player-controls .playback-progressbar::before {
+[data-testid="player-controls"] [data-testid="playback-progressbar"]::before {
   content: '';
   position: absolute;
   bottom: calc(100% + 8px);

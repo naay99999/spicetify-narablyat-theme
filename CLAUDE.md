@@ -40,7 +40,7 @@ Spotify's XPUI source is bundled locally and can be read directly to find select
 
 Key files: `xpui-snapshot.css` (root layout, sidebars, player bar, Encore base styles), `dwp-now-playing-bar.css` (player bar controls, progress, volume), `xpui-modules.js` (lyrics component implementation — `xpui-routes-lyrics.js` is only a thin wrapper).
 
-Known-stable root selectors: `.Root__now-playing-bar`, `.Root__nav-bar`, `.Root__right-sidebar`, `.Root__main-view`, and the `.lyrics-lyrics-*` classes.
+Known-stable root selectors: `.Root__nav-bar`, `.Root__right-sidebar`, `.Root__main-view`, and the `.lyrics-lyrics-*` classes. The now-playing bar dropped its `.Root__now-playing-bar` class in a recent Spotify build — target it via `[data-testid="now-playing-bar"]` instead. Its internal progress/volume bars similarly lost the `.playback-bar`/`.volume-bar` classes; use `[data-testid="playback-progressbar"]` and `[data-testid="volume-bar"]` as ancestors.
 
 See `docs/ui-fix-guidelines.md` for detailed selector research and per-area fix guidance.
 
