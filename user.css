@@ -658,7 +658,7 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
    `color: var(--lyrics-color-active)` then resolves to our value. */
 .lyrics-lyrics-container {
   --lyrics-color-background: var(--surface) !important;
-  --lyrics-color-active: var(--accent) !important;
+  --lyrics-color-active: var(--spice-text) !important;
   --lyrics-color-inactive: color-mix(in srgb, var(--spice-subtext) 65%, transparent) !important;
   border-radius: var(--radius-md);
   overflow: hidden;
@@ -669,19 +669,24 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
   background: var(--lyrics-color-background) !important;
 }
 
-/* Redundant with the --lyrics-color-active override above (which does the
-   real work) - kept as a fallback in case some render path skips the inline
-   style. */
-.lyrics-lyricsContent-active {
-  color: var(--accent) !important;
+/* The color here is redundant with the --lyrics-color-active override above
+   (kept as a fallback in case some render path skips the inline style); the
+   text-shadow glow only lives here. */
+.lyrics-lyricsContent-lyric.lyrics-lyricsContent-active {
+  color: var(--spice-text) !important;
   font-weight: 900;
   font-size: 1.2em;
-  position: relative;
+  /* Glow hugs the glyphs via text-shadow — a ::before on the line box would
+     span the container's full width regardless of how long the text is. */
+  text-shadow:
+    0 0 12px color-mix(in srgb, var(--glow-core) 55%, transparent),
+    0 0 36px color-mix(in srgb, var(--glow-core) 30%, transparent);
 }
 
-.lyrics-lyricsContent-lyric,
-.lyrics-lyricsContent-previous,
-.lyrics-lyricsContent-upcoming,
+/* :not(-active) keeps this !important rule off the active line — the active
+   line also carries the -lyric class, and without the guard this later rule
+   would out-cascade the active color above at equal specificity. */
+.lyrics-lyricsContent-lyric:not(.lyrics-lyricsContent-active),
 .lyrics-lyricsContent-provider {
   color: color-mix(in srgb, var(--lyrics-color-inactive) 50%, var(--spice-subtext) 50%) !important;
 }
@@ -694,17 +699,6 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
   opacity: 0.55;
   filter: blur(1px);
   transition: opacity var(--transition-fast), filter var(--transition-fast);
-}
-
-/* Soft glow anchored behind the active line — bonus pop point, kept low
-   alpha per the accent-is-functional-only rule. */
-.lyrics-lyricsContent-active::before {
-  content: "";
-  position: absolute;
-  inset: -0.3em -1.5em;
-  background: radial-gradient(60% 70% at 50% 50%, color-mix(in srgb, var(--glow-core) 16%, transparent), transparent 72%);
-  filter: blur(18px);
-  pointer-events: none;
 }
 
 /* Spotify remounts lines as they advance rather than mutating one node, so

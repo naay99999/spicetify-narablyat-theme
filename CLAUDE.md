@@ -101,7 +101,7 @@ After `spicetify apply`, verify in both `suudLorLight` and `suudLorDark`:
 - Play button — gradient fill with glow underneath
 - Chips/filter tabs — flat at rest; selected shows gradient + white text + glow
 - Sidebar and cards — flat/lift shadows only, border radius
-- Lyrics route — flat opaque background, active line accent with soft glow, lyrics readable
+- Lyrics route — flat opaque background, active line in text color (white on dark) with a text-shadow glow that follows the line length, lyrics readable
 
 ## Commit Style
 

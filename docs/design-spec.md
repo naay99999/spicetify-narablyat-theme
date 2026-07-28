@@ -124,7 +124,7 @@ Empty cell = no styling for that state (intentional). `/* Hover removed */` plac
 
 - **Primitives** live in `color.ini` (`suudLorLight`, `suudLorDark`). Neutral base is unchanged platinum/near-black. Accent rows: light `accent`/`button` = `7c3aed`, `button-active` = `8b5cf6`; dark `accent`/`button` = `a78bfa`, `button-active` = `c4b5fd`; both schemes `player-bar-bg` = `a78bfa`.
 - **Ground** is flat: `body { background: var(--surface-bg) }`. No gradients, blobs, or noise (D9) — a clean field is what makes the glows read.
-- **Lyrics route:** `--lyrics-color-background` overridden to `var(--surface)` (flat, opaque); active line = `--accent`; the active-line radial glow uses `--glow-core` at 24%.
+- **Lyrics route:** `--lyrics-color-background` overridden to `var(--surface)` (flat, opaque); active line = `--spice-text` (near-white on dark, near-black on light) for max readability; the glow is a `text-shadow` in `--glow-core` (55% at 12px, 30% at 36px) so it tracks the glyphs and scales with line length.
 
 ## 7. Accessibility Baseline
 
