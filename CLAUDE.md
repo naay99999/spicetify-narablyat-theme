@@ -49,13 +49,13 @@ See `docs/ui-fix-guidelines.md` for detailed selector research and per-area fix 
 **`user.css`** — All visual styling. Structured in sections (spec §10):
 - CSS custom properties at `:root` (accent ramp, gradient/glow tokens, surfaces, shadow scale, radii, transitions, search variables)
 - Topbar search (`spice-glass-topbar` — legacy class name) — flat pill with accent focus ring
-- Modal search dialog (`spice-glass-dialog` — legacy class name) — solid card with soft float shadow
+- Modal search dialog (selected via `:has([data-testid="search-modal-input"])`) — solid card with soft float shadow
 - Progress/volume bars — gradient playback fill, solid volume, rounded rails
 - Now-playing bar — floating solid card with a 1px gradient top hairline and wide glow
 - Chips/tabs — flat at rest; selected state carries the gradient + glow
 
 **`theme.js`** — Two IIFEs that run at Spotify startup:
-1. **Class injector** — `MutationObserver` watches the DOM and adds `spice-glass-overlay`, `spice-glass-dialog`, `spice-glass-inputWrap`, `spice-glass-topbar` (legacy names from the glass era, kept for stability) to Spotify's dynamically rendered elements.
+1. **Class injector** — `MutationObserver` watches the DOM and adds `spice-glass-topbar` (legacy name from the glass era, kept for stability) to the topbar search. The search modal used to get `spice-glass-*` classes too, but React rewrites the dialog's `className` on re-render, so it is now styled purely via `:has()` in `user.css`.
 2. **Scheme stamping** — computes `--spice-main` luminance and sets `data-scheme="light|dark"` on `<html>` so token overrides can branch.
 
 **`color.ini`** — Two color schemes: `suudLorLight` (platinum) and `suudLorDark` (near-black). Variables here map to Spicetify's `--spice-*` CSS variables; the per-scheme solid accents live here.

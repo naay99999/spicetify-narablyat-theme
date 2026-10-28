@@ -1,19 +1,10 @@
-/* Attach styling-hook classes to Search modal and topbar search.
-   The spice-glass-* names are legacy hooks kept from the glass era; user.css
-   still targets them, so renaming is tracked as a separate follow-up. */
+/* Attach the styling-hook class to the topbar search.
+   The spice-glass-* name is a legacy hook kept from the glass era; user.css
+   still targets it, so renaming is tracked as a separate follow-up. The
+   search modal is styled purely via :has() in user.css — React rewrites the
+   dialog's className on re-render, which wiped classes injected here. */
 (function () {
   const applyGlassEnhancements = () => {
-    // Modal overlay + dialog. Anchored on the modal's input testid: 1.3.6
-    // dropped .GenericModal__overlay and the dialog's aria-label is localized.
-    document.querySelectorAll('input[data-testid="search-modal-input"]').forEach((input) => {
-      const dialog = input.closest('[role="dialog"]');
-      if (!dialog || dialog.classList.contains('spice-glass-dialog')) return;
-      dialog.classList.add('spice-glass-dialog');
-      const overlay = dialog.closest('.ReactModal__Overlay') || dialog.parentElement;
-      if (overlay) overlay.classList.add('spice-glass-overlay');
-      if (input.parentElement) input.parentElement.classList.add('spice-glass-inputWrap');
-    });
-
     // Topbar inline search — try multiple selectors for Spotify version resilience
     const topbarSelectors = [
       '.main-globalNav-searchInputContainer',

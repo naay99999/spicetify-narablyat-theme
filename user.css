@@ -274,26 +274,50 @@ div:has(> #main-view) {
 }
 
 /* ---- Search: Modal ---- */
+/* Selected via :has() on the input's testid rather than classes from
+   theme.js: React rewrites the dialog's className on re-render. */
 
 /* Thin opaque scrim — no blur */
-.spice-glass-overlay {
+.ReactModalPortal > :has([data-testid="search-modal-input"]) {
   background: rgba(0, 0, 0, 0.3) !important;
 }
 
-/* The dialog card */
-.spice-glass-dialog[role="dialog"] {
+/* The dialog card. In 1.3.6 the dialog's single child wraps the input
+   header, the shortcut row and the results list; Spotify paints only the
+   header and shortcut row, so results floated over the page. Paint the
+   wrapper as one plain card and clear its sections. */
+[role="dialog"]:has([data-testid="search-modal-input"]) > div {
   background: var(--surface) !important;
   border: 1px solid var(--hairline) !important;
   border-radius: var(--radius-lg) !important;
   box-shadow: var(--shadow-float) !important;
   overflow: hidden;
-  margin: 6vh auto !important;
+  /* Spotify fixes this at 800px, which left a tall empty card before the
+     first keystroke; size to content, still capped at its 80vh max. */
+  height: auto !important;
+}
+
+[role="dialog"]:has([data-testid="search-modal-input"]) > div > div {
+  background: transparent !important;
+}
+
+/* The overlay centers the dialog with flexbox; once the card sizes to its
+   content it would jump to mid-screen on every keystroke. Pin it to the
+   top at the same 10vh offset the full-height (80vh) card sits at. */
+[role="dialog"]:has([data-testid="search-modal-input"]) {
+  align-self: flex-start !important;
+  margin-top: 10vh !important;
+}
+
+/* Let the results list shrink inside the capped card and scroll */
+[role="dialog"]:has([data-testid="search-modal-input"]) #search-modal-listbox {
+  min-height: 0;
 }
 
 /* Search input pill inside modal */
 /* Spotify paints this wrapper as an inverted pill (--spice-text bg, which
    is near-black on the light scheme); replace it with the neutral tint. */
-.spice-glass-dialog .spice-glass-inputWrap {
+[role="dialog"] :has(> [data-testid="search-modal-input"]) {
   height: auto !important;
   background: color-mix(in srgb, var(--spice-text, #111111) 5%, transparent) !important;
   border: 1px solid var(--hairline) !important;
@@ -302,20 +326,21 @@ div:has(> #main-view) {
   display: flex;
   align-items: center;
   gap: 10px;
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast) !important;
 }
 
-.spice-glass-dialog .spice-glass-inputWrap:focus-within {
-  border-color: var(--accent) !important;
-  box-shadow: var(--glow-ring) !important;
+/* The input is always focused while the modal is open, so a focus ring
+   would just be a permanent purple outline; the card stays minimal. */
+[role="dialog"] :has(> [data-testid="search-modal-input"]):focus-within {
+  border-color: var(--hairline) !important;
+  box-shadow: none !important;
 }
 
-.spice-glass-dialog .spice-glass-inputWrap svg {
+[role="dialog"] :has(> [data-testid="search-modal-input"]) svg {
   color: var(--ui-subtext) !important;
   fill: var(--ui-subtext) !important;
 }
 
-.spice-glass-dialog [data-testid="search-modal-input"] {
+[role="dialog"]:has([data-testid="search-modal-input"]) [data-testid="search-modal-input"] {
   background: transparent !important;
   color: var(--ui-text) !important;
   outline: none !important;
@@ -324,27 +349,29 @@ div:has(> #main-view) {
 }
 
 /* Results list */
-.spice-glass-dialog #search-modal-listbox {
+[role="dialog"]:has([data-testid="search-modal-input"]) #search-modal-listbox {
   background: transparent !important;
 }
 
-.spice-glass-dialog [role="option"] {
+[role="dialog"]:has([data-testid="search-modal-input"]) [role="option"] {
   border-radius: var(--radius-sm);
 }
 
 /* Dense list row: pointer tracking in a long results list (D1) */
-.spice-glass-dialog [role="option"]:hover {
+[role="dialog"]:has([data-testid="search-modal-input"]) [role="option"]:hover {
   background: var(--row-hover) !important;
 }
 
-.spice-glass-dialog [role="option"][aria-selected="true"] {
-  background: var(--accent-a08) !important;
-  /* Non-color cue alongside the bg tint (non-color signal rule) */
-  box-shadow: inset 2px 0 0 var(--accent-a75) !important;
+/* Keyboard selection: a neutral tint a step above hover — no accent, the
+   card stays minimal. Tint strength is the non-color cue. */
+[role="dialog"]:has([data-testid="search-modal-input"]) [role="option"][aria-selected="true"] {
+  background: color-mix(in srgb, var(--spice-text, #111111) 9%, transparent) !important;
+  box-shadow: none !important;
+  outline: none !important;
 }
 
 /* Shortcut chips */
-.spice-glass-dialog kbd {
+[role="dialog"]:has([data-testid="search-modal-input"]) kbd {
   background: color-mix(in srgb, var(--spice-text) 6%, transparent) !important;
   border: 1px solid color-mix(in srgb, var(--spice-text) 8%, transparent) !important;
   border-bottom-width: 2px !important;
@@ -407,11 +434,12 @@ div:has(> #main-view) {
   color: var(--ui-accent) !important;
 }
 
-/* Primary play/pause — pop point: gradient fill + glow.
-   background-color stays as the solid fallback under the gradient image. */
-[data-testid="control-button-playpause"],
-[data-testid="control-button-playpause"] > button,
-[data-testid="control-button-playpause"] button[class*="Button"] {
+/* Primary play/pause — pop point: gradient fill + glow. Encore paints the
+   circle on the button's inner span (with a solid inverted/bright-accent
+   set), so the gradient goes there; covers the player bar and the
+   entity action bar. background-color stays as the solid fallback. */
+[data-testid="control-button-playpause"] > [class*="button-primary__inner"],
+#main-view [data-encore-id="buttonPrimary"][data-is-icon-only="true"] > [class*="button-primary__inner"] {
   background: var(--grad-pop) !important;
   background-color: var(--ui-accent) !important;
   color: var(--accent-ink) !important;
@@ -766,11 +794,12 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
       animation-range: cover 0% cover 100%;
     }
 
+    /* Edge lines stay legible: a light 1px soften, not a heavy blur. */
     @keyframes lyricsLineFocus {
       0%, 100% {
-        opacity: 0.4;
-        filter: blur(3px);
-        transform: scale(0.94);
+        opacity: 0.55;
+        filter: blur(1px);
+        transform: scale(0.96);
       }
       50% {
         opacity: 1;
@@ -835,6 +864,14 @@ div:has(> .contentSpacing [data-encore-id="chip"]) > div[style*="--background-ba
 }
 
 .main-entityHeader-backgroundColor {
+  display: none !important;
+}
+
+/* hashed: 1.3.6 entity header artwork-color fill (inline background-color)
+   and the action-bar gradient under it — on light the header text is
+   near-black, so the colored block left usernames unreadable */
+.N6W22Ky7W6I93tr3vrqE,
+.T2XRKvkWneSSMSOCEo40 {
   display: none !important;
 }
 
@@ -915,11 +952,12 @@ html .encore-over-media-set {
   --cinema-mode-bg-color-from: var(--spice-main) !important;
   --cinema-mode-bg-color-to: var(--spice-main) !important;
 }
-/* hashed: cinema frame — draws a black panel-gap outline around the view */
-.BKBhMtk7_HSsKiFLJtC_ {
+/* hashed: cinema frame and its rounded inner panel — both draw a black
+   panel-gap outline; the inner one shows as black wedges at the corners */
+.BKBhMtk7_HSsKiFLJtC_,
+.xT1RZwPYcz7B6Ce7d5_5 {
   outline-color: var(--spice-main) !important;
 }
-
 /* Light scheme NPV canvas: Spotify's three scrims end in solid
    oklch(18%) so dark-theme white text reads over the video. On light the
    text is near-black, so wash the canvas toward the page color instead.
@@ -953,4 +991,9 @@ html[data-scheme="light"] [data-canvas-surface] .FFQJwuDGRImvqvZRrRZP {
 #Desktop_LeftSidebar_Id .ZQYP06Jt0JvCzAHgMZDw,
 .view-homeShortcutsGrid-imageWrapper {
   box-shadow: none !important;
+}
+/* hashed: entity header artwork (playlist/album cover) — same 0 4px 60px
+   black shadow; cards are Lift per spec §4.3 */
+.ZQYP06Jt0JvCzAHgMZDw {
+  box-shadow: var(--shadow-lift) !important;
 }

@@ -24,12 +24,13 @@ Companions: [`redesign-plan.md`](./redesign-plan.md) — the glass → Clean Pop
 | D1 | Hover policy: hover background allowed on dense list rows only (via `--row-hover`); removed everywhere else. | Accepted |
 | D5 | Floating player bar radius snaps to the scale: `--radius-lg` (28px). | Accepted |
 | D6 | Scheme detection is done by `theme.js` (luminance of `--spice-main`) stamping `data-scheme="light|dark"` on `<html>`; CSS branches on it. | Accepted |
-| D7 | Only the search modal overlay (`.spice-glass-overlay`) is customized (thin `rgba(0,0,0,.3)` scrim). All other modals keep their default scrim. | Accepted |
+| D7 | Only the search modal overlay (`.ReactModalPortal > :has([data-testid="search-modal-input"])`) is customized (thin `rgba(0,0,0,.3)` scrim). All other modals keep their default scrim. | Accepted |
 | D9 | Liquid Glass retired: no `backdrop-filter`, no translucent surfaces, no ambient blobs/gradient, no noise overlays. Elevation is expressed with the 3-level shadow scale (§4.4). | Accepted |
 | D10 | Accent is the "Soft Orchid" gradient `#7c3aed → #a855f7`; glows use a deliberately softer lavender `--glow-core: #a78bfa` so they read gentle, not neon (box-shadow cannot render a gradient anyway). Solid accent per scheme: `#7c3aed` light / `#a78bfa` dark. Forest green `#16a34a` is retired everywhere. Amended 2026-07-16: the original "Neon Orchid" (`#a855f7 → #ec4899`, glow `#d946ef`) was rejected as too harsh — softened to violet, glow alphas cut ~1/3. | Accepted |
 | D11 | `--pop-b` (`#a855f7`, ~3.8:1 on `#fafafa`) is never used as text/icon color on a light ground; single-color accent contexts always use `--accent` (from `color.ini`). | Accepted |
 | D12 | `spice-glass-*` class names in `theme.js`/`user.css` are legacy hooks kept for stability; renaming to `spice-pop-*` is a separate follow-up, not part of the redesign commits. | Accepted |
 | D13 | Selected chips inside a carousel (`[data-carousel-item]`) keep `--grad-pop` but drop `--glow-pop`: Spotify clips the carousel's overflow on three nested boxes, so the glow renders as a hard-edged rectangle. Chips outside carousels keep the glow. Added 2026-10-28. | Accepted |
+| D14 | The Cmd+K search modal is a plain minimal card: no accent focus ring on its input (it is always focused while open, so the ring read as a permanent purple outline) and keyboard-selected results use a neutral tint instead of an accent bar. Added 2026-10-28. | Accepted |
 
 Glass-era decisions D2–D4, D8 are retired with the system they governed. To reverse a decision: edit this table, then update the affected tokens/rules in the same commit.
 
