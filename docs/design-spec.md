@@ -29,6 +29,7 @@ Companions: [`redesign-plan.md`](./redesign-plan.md) — the glass → Clean Pop
 | D10 | Accent is the "Soft Orchid" gradient `#7c3aed → #a855f7`; glows use a deliberately softer lavender `--glow-core: #a78bfa` so they read gentle, not neon (box-shadow cannot render a gradient anyway). Solid accent per scheme: `#7c3aed` light / `#a78bfa` dark. Forest green `#16a34a` is retired everywhere. Amended 2026-07-16: the original "Neon Orchid" (`#a855f7 → #ec4899`, glow `#d946ef`) was rejected as too harsh — softened to violet, glow alphas cut ~1/3. | Accepted |
 | D11 | `--pop-b` (`#a855f7`, ~3.8:1 on `#fafafa`) is never used as text/icon color on a light ground; single-color accent contexts always use `--accent` (from `color.ini`). | Accepted |
 | D12 | `spice-glass-*` class names in `theme.js`/`user.css` are legacy hooks kept for stability; renaming to `spice-pop-*` is a separate follow-up, not part of the redesign commits. | Accepted |
+| D13 | Selected chips inside a carousel (`[data-carousel-item]`) keep `--grad-pop` but drop `--glow-pop`: Spotify clips the carousel's overflow on three nested boxes, so the glow renders as a hard-edged rectangle. Chips outside carousels keep the glow. Added 2026-10-28. | Accepted |
 
 Glass-era decisions D2–D4, D8 are retired with the system they governed. To reverse a decision: edit this table, then update the affected tokens/rules in the same commit.
 
