@@ -3,25 +3,22 @@
    still targets them, so renaming is tracked as a separate follow-up. */
 (function () {
   const applyGlassEnhancements = () => {
-    // Modal overlay + dialog
-    const overlays = document.querySelectorAll('.ReactModalPortal .GenericModal__overlay:not(.spice-glass-overlay)');
-    overlays.forEach((overlay) => {
-      const dialog = overlay.querySelector('[role="dialog"][aria-label="Search"]');
-      if (dialog) {
-        overlay.classList.add('spice-glass-overlay');
-        dialog.classList.add('spice-glass-dialog');
-
-        const input = dialog.querySelector('input[data-testid="search-modal-input"]');
-        if (input && input.parentElement && !input.parentElement.classList.contains('spice-glass-inputWrap')) {
-          input.parentElement.classList.add('spice-glass-inputWrap');
-        }
-      }
+    // Modal overlay + dialog. Anchored on the modal's input testid: 1.3.6
+    // dropped .GenericModal__overlay and the dialog's aria-label is localized.
+    document.querySelectorAll('input[data-testid="search-modal-input"]').forEach((input) => {
+      const dialog = input.closest('[role="dialog"]');
+      if (!dialog || dialog.classList.contains('spice-glass-dialog')) return;
+      dialog.classList.add('spice-glass-dialog');
+      const overlay = dialog.closest('.ReactModal__Overlay') || dialog.parentElement;
+      if (overlay) overlay.classList.add('spice-glass-overlay');
+      if (input.parentElement) input.parentElement.classList.add('spice-glass-inputWrap');
     });
 
     // Topbar inline search — try multiple selectors for Spotify version resilience
     const topbarSelectors = [
       '.main-globalNav-searchInputContainer',
       '[data-testid="topbar-search-bar"]',
+      '#global-nav-bar form[role="search"]',
       'header [role="search"]',
       'header form[role="search"]',
     ];
