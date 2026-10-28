@@ -104,13 +104,17 @@ body {
    ============================================================ */
 
 /* ---- Nav Bar ---- */
+/* Spotify 1.3.6 dropped the Root__* classes. Its replacement,
+   #Desktop_LeftSidebar_Id, is a rounded panel, so a border-right here curves
+   around the corners and reads as a shadow; leave it unstyled. */
 .Root__nav-bar {
   background: var(--surface-bg) !important;
   border-right: 1px solid var(--hairline) !important;
 }
 
-/* Clearance for floating player bar */
-.Root__main-view {
+/* Clearance for floating player bar — padded on the layout grid itself so
+   the left sidebar, main view and right sidebar all end above the bar. */
+div:has(> #main-view) {
   padding-bottom: 96px !important;
 }
 
@@ -123,6 +127,14 @@ body {
   background: var(--surface) !important;
   border-left: 1px solid var(--hairline) !important;
   box-shadow: none !important;
+}
+
+/* hashed: right sidebar grid item (no id/testid in 1.3.6) — update if the
+   right sidebar loses its styling after a Spotify update. In 1.3.6 this is
+   a square-cornered wrapper around Spotify's own rounded panel, so painting
+   it shows grey corners; only the subdued-text token is set here. */
+.dMf_PkfPVTEuSmc11MZp {
+  --text-subdued: color-mix(in srgb, var(--ui-text) 60%, transparent);
 }
 
 /* Playing Bar — floating, the theme's signature pop element.
@@ -169,22 +181,26 @@ body {
   box-shadow: var(--glow-ring) !important;
 }
 
-/* Input text within topbar pill */
+/* Input text within topbar pill. In 1.3.6 the input itself paints the pill
+   (and swaps to --background-elevated-highlight on hover/focus), so clear it
+   and let .spice-glass-topbar own the surface. */
 .spice-glass-topbar .x-searchInput-searchInputInput,
-.spice-glass-topbar input[type="search"] {
+.spice-glass-topbar input[type="search"],
+.spice-glass-topbar input[role="combobox"] {
   background: transparent !important;
   color: var(--search-text) !important;
+  box-shadow: none !important;
 }
 
 /* Leading icon: neutral at rest, accent on focus (no hover states) */
-.spice-glass-topbar .e-91000-form-input-icon__icon--leading svg,
+.spice-glass-topbar [class*="form-input-icon__icon--leading"] svg,
 .spice-glass-topbar .x-searchInput-searchInputSearchIcon {
   color: var(--search-icon) !important;
   fill: var(--search-icon) !important;
   transition: color var(--transition-fast), fill var(--transition-fast), transform var(--transition-fast);
 }
 
-.spice-glass-topbar:focus-within .e-91000-form-input-icon__icon--leading svg,
+.spice-glass-topbar:focus-within [class*="form-input-icon__icon--leading"] svg,
 .spice-glass-topbar:focus-within .x-searchInput-searchInputSearchIcon {
   transform: scale(1.06);
   color: var(--search-icon-focus) !important;
@@ -258,24 +274,51 @@ body {
 }
 
 /* ---- Search: Modal ---- */
+/* Selected via :has() on the input's testid rather than classes from
+   theme.js: React rewrites the dialog's className on re-render. */
 
 /* Thin opaque scrim — no blur */
-.spice-glass-overlay.GenericModal__overlay {
+.ReactModalPortal > :has([data-testid="search-modal-input"]) {
   background: rgba(0, 0, 0, 0.3) !important;
 }
 
-/* The dialog card */
-.spice-glass-dialog[role="dialog"][aria-label="Search"] {
+/* The dialog card. In 1.3.6 the dialog's single child wraps the input
+   header, the shortcut row and the results list; Spotify paints only the
+   header and shortcut row, so results floated over the page. Paint the
+   wrapper as one plain card and clear its sections. */
+[role="dialog"]:has([data-testid="search-modal-input"]) > div {
   background: var(--surface) !important;
   border: 1px solid var(--hairline) !important;
   border-radius: var(--radius-lg) !important;
   box-shadow: var(--shadow-float) !important;
   overflow: hidden;
-  margin: 6vh auto !important;
+  /* Spotify fixes this at 800px, which left a tall empty card before the
+     first keystroke; size to content, still capped at its 80vh max. */
+  height: auto !important;
+}
+
+[role="dialog"]:has([data-testid="search-modal-input"]) > div > div {
+  background: transparent !important;
+}
+
+/* The overlay centers the dialog with flexbox; once the card sizes to its
+   content it would jump to mid-screen on every keystroke. Pin it to the
+   top at the same 10vh offset the full-height (80vh) card sits at. */
+[role="dialog"]:has([data-testid="search-modal-input"]) {
+  align-self: flex-start !important;
+  margin-top: 10vh !important;
+}
+
+/* Let the results list shrink inside the capped card and scroll */
+[role="dialog"]:has([data-testid="search-modal-input"]) #search-modal-listbox {
+  min-height: 0;
 }
 
 /* Search input pill inside modal */
-.spice-glass-dialog .spice-glass-inputWrap {
+/* Spotify paints this wrapper as an inverted pill (--spice-text bg, which
+   is near-black on the light scheme); replace it with the neutral tint. */
+[role="dialog"] :has(> [data-testid="search-modal-input"]) {
+  height: auto !important;
   background: color-mix(in srgb, var(--spice-text, #111111) 5%, transparent) !important;
   border: 1px solid var(--hairline) !important;
   border-radius: var(--radius-full) !important;
@@ -283,20 +326,21 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast) !important;
 }
 
-.spice-glass-dialog .spice-glass-inputWrap:focus-within {
-  border-color: var(--accent) !important;
-  box-shadow: var(--glow-ring) !important;
+/* The input is always focused while the modal is open, so a focus ring
+   would just be a permanent purple outline; the card stays minimal. */
+[role="dialog"] :has(> [data-testid="search-modal-input"]):focus-within {
+  border-color: var(--hairline) !important;
+  box-shadow: none !important;
 }
 
-.spice-glass-dialog .spice-glass-inputWrap svg {
-  color: var(--ui-subtext);
-  fill: var(--ui-subtext);
+[role="dialog"] :has(> [data-testid="search-modal-input"]) svg {
+  color: var(--ui-subtext) !important;
+  fill: var(--ui-subtext) !important;
 }
 
-.spice-glass-dialog [data-testid="search-modal-input"] {
+[role="dialog"]:has([data-testid="search-modal-input"]) [data-testid="search-modal-input"] {
   background: transparent !important;
   color: var(--ui-text) !important;
   outline: none !important;
@@ -305,27 +349,29 @@ body {
 }
 
 /* Results list */
-.spice-glass-dialog #search-modal-listbox {
+[role="dialog"]:has([data-testid="search-modal-input"]) #search-modal-listbox {
   background: transparent !important;
 }
 
-.spice-glass-dialog [role="option"] {
+[role="dialog"]:has([data-testid="search-modal-input"]) [role="option"] {
   border-radius: var(--radius-sm);
 }
 
 /* Dense list row: pointer tracking in a long results list (D1) */
-.spice-glass-dialog [role="option"]:hover {
+[role="dialog"]:has([data-testid="search-modal-input"]) [role="option"]:hover {
   background: var(--row-hover) !important;
 }
 
-.spice-glass-dialog [role="option"][aria-selected="true"] {
-  background: var(--accent-a08) !important;
-  /* Non-color cue alongside the bg tint (non-color signal rule) */
-  box-shadow: inset 2px 0 0 var(--accent-a75) !important;
+/* Keyboard selection: a neutral tint a step above hover — no accent, the
+   card stays minimal. Tint strength is the non-color cue. */
+[role="dialog"]:has([data-testid="search-modal-input"]) [role="option"][aria-selected="true"] {
+  background: color-mix(in srgb, var(--spice-text, #111111) 9%, transparent) !important;
+  box-shadow: none !important;
+  outline: none !important;
 }
 
 /* Shortcut chips */
-.spice-glass-dialog kbd {
+[role="dialog"]:has([data-testid="search-modal-input"]) kbd {
   background: color-mix(in srgb, var(--spice-text) 6%, transparent) !important;
   border: 1px solid color-mix(in srgb, var(--spice-text) 8%, transparent) !important;
   border-bottom-width: 2px !important;
@@ -388,11 +434,12 @@ body {
   color: var(--ui-accent) !important;
 }
 
-/* Primary play/pause — pop point: gradient fill + glow.
-   background-color stays as the solid fallback under the gradient image. */
-[data-testid="control-button-playpause"],
-[data-testid="control-button-playpause"] > button,
-[data-testid="control-button-playpause"] button[class*="Button"] {
+/* Primary play/pause — pop point: gradient fill + glow. Encore paints the
+   circle on the button's inner span (with a solid inverted/bright-accent
+   set), so the gradient goes there; covers the player bar and the
+   entity action bar. background-color stays as the solid fallback. */
+[data-testid="control-button-playpause"] > [class*="button-primary__inner"],
+#main-view [data-encore-id="buttonPrimary"][data-is-icon-only="true"] > [class*="button-primary__inner"] {
   background: var(--grad-pop) !important;
   background-color: var(--ui-accent) !important;
   color: var(--accent-ink) !important;
@@ -559,7 +606,8 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
    chips are a pop point: gradient fill, inverted ink, short glow. */
 .main-home-filterChipsSection [role="tab"],
 .main-home-filterChipsSection button[class*="chip"],
-.main-home-filterChipsSection [class*="filterChip"] {
+.main-home-filterChipsSection [class*="filterChip"],
+[data-encore-id="chip"] {
   background: var(--surface) !important;
   border: 1px solid var(--hairline) !important;
   border-radius: var(--radius-full) !important;
@@ -573,7 +621,7 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
 .main-home-filterChipsSection button[class*="chip"][aria-checked="true"],
 .main-home-filterChipsSection [class*="filterChip"][aria-selected="true"],
 .main-home-filterChipsSection [class*="filterChip"][aria-checked="true"],
-.main-home-filterChipsSection .e-10451-legacy-chip--selected,
+.main-home-filterChipsSection [class*="legacy-chip--selected"],
 [data-encore-id="chip"][aria-checked="true"] {
   background: var(--grad-pop) !important;
   border-color: transparent !important;
@@ -581,9 +629,23 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
   box-shadow: var(--glow-pop) !important;
 }
 
+/* Chip carousels clip overflow on three nested boxes (row, carousel,
+   scroller), which cuts the glow into a hard-edged rectangle. Inside a
+   carousel the selected chip keeps the gradient but drops the glow (D13). */
+[data-carousel-item] [data-encore-id="chip"][aria-checked="true"] {
+  box-shadow: none !important;
+}
+
+/* encore paints the chip fill on the inner span (with its own hover tint);
+   clear it so the button's surface/gradient shows. The encore-<build>-
+   prefix changes per Spotify release, so match by substring. */
+[data-encore-id="chip"] > [class*="legacy-chip__inner"] {
+  background: transparent !important;
+}
+
 /* keep encore's inner spans on the gradient's inverted ink */
 [data-encore-id="chip"][aria-checked="true"] .encore-inverted-light-set,
-.e-10451-legacy-chip--selected .e-10451-legacy-chip__inner {
+[class*="legacy-chip--selected"] [class*="legacy-chip__inner"] {
   color: var(--accent-ink) !important;
   background: transparent !important;
 }
@@ -655,8 +717,16 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
    which beats any stylesheet !important regardless of specificity - the .lyrics-
    lyricsContent-active/-lyric color rules below can't out-fight that directly.
    Overriding the custom properties here instead works: Spotify's own inline
-   `color: var(--lyrics-color-active)` then resolves to our value. */
-.lyrics-lyrics-container {
+   `color: var(--lyrics-color-active)` then resolves to our value.
+
+   Spotify 1.3.6 hashed every lyrics class. The container is matched by the
+   inline --lyrics-color-* vars it carries; the line classes are hashed:
+     .MFEBmMwUCW5Qmg8VwGim  line   .xp5WpqjB3u9hFHWKn2aE  active
+     .NToFVceZLenbhmfcDb3s  passed .tixQoLB1xUrPglVJ91J4  upcoming
+     .OaXGHrbiWJI_moHj0__w  background layer
+   update these if lyrics lose their styling after a Spotify update. */
+.lyrics-lyrics-container,
+[style*="--lyrics-color-active"] {
   --lyrics-color-background: var(--surface) !important;
   --lyrics-color-active: var(--spice-text) !important;
   --lyrics-color-inactive: color-mix(in srgb, var(--spice-subtext) 65%, transparent) !important;
@@ -665,14 +735,16 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
 }
 
 /* Flat opaque ground — no album-color block, no blur */
-.lyrics-lyrics-background {
+.lyrics-lyrics-background,
+.OaXGHrbiWJI_moHj0__w {
   background: var(--lyrics-color-background) !important;
 }
 
 /* The color here is redundant with the --lyrics-color-active override above
    (kept as a fallback in case some render path skips the inline style); the
    text-shadow glow only lives here. */
-.lyrics-lyricsContent-lyric.lyrics-lyricsContent-active {
+.lyrics-lyricsContent-lyric.lyrics-lyricsContent-active,
+.MFEBmMwUCW5Qmg8VwGim.xp5WpqjB3u9hFHWKn2aE {
   color: var(--spice-text) !important;
   font-weight: 900;
   font-size: 1.2em;
@@ -687,6 +759,7 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
    line also carries the -lyric class, and without the guard this later rule
    would out-cascade the active color above at equal specificity. */
 .lyrics-lyricsContent-lyric:not(.lyrics-lyricsContent-active),
+.MFEBmMwUCW5Qmg8VwGim:not(.xp5WpqjB3u9hFHWKn2aE),
 .lyrics-lyricsContent-provider {
   color: color-mix(in srgb, var(--lyrics-color-inactive) 50%, var(--spice-subtext) 50%) !important;
 }
@@ -695,7 +768,9 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
    active line. Compound selector matches Spotify's own specificity so the
    native hover-to-seek affordance (:hover on -previous/-upcoming) still wins. */
 .lyrics-lyricsContent-lyric.lyrics-lyricsContent-previous,
-.lyrics-lyricsContent-lyric.lyrics-lyricsContent-upcoming {
+.lyrics-lyricsContent-lyric.lyrics-lyricsContent-upcoming,
+.MFEBmMwUCW5Qmg8VwGim.NToFVceZLenbhmfcDb3s,
+.MFEBmMwUCW5Qmg8VwGim.tixQoLB1xUrPglVJ91J4 {
   opacity: 0.55;
   filter: blur(1px);
   transition: opacity var(--transition-fast), filter var(--transition-fast);
@@ -709,7 +784,8 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
    keeps it sharp; don't raise specificity to force it on. */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    .lyrics-lyricsContent-lyric {
+    .lyrics-lyricsContent-lyric,
+    .MFEBmMwUCW5Qmg8VwGim {
       view-timeline: --lyric-line-progress block;
       animation-name: lyricsLineFocus;
       animation-timing-function: linear;
@@ -718,11 +794,12 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
       animation-range: cover 0% cover 100%;
     }
 
+    /* Edge lines stay legible: a light 1px soften, not a heavy blur. */
     @keyframes lyricsLineFocus {
       0%, 100% {
-        opacity: 0.4;
-        filter: blur(3px);
-        transform: scale(0.94);
+        opacity: 0.55;
+        filter: blur(1px);
+        transform: scale(0.96);
       }
       50% {
         opacity: 1;
@@ -736,7 +813,8 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
        doesn't touch animation-name/-timeline, so the animation above kept
        running there against a stray borrowed timeline. Turn it off
        explicitly so the active line stays untouched. */
-    .lyrics-lyricsContent-lyric.lyrics-lyricsContent-active {
+    .lyrics-lyricsContent-lyric.lyrics-lyricsContent-active,
+    .MFEBmMwUCW5Qmg8VwGim.xp5WpqjB3u9hFHWKn2aE {
       animation-name: none;
       animation-timeline: none;
     }
@@ -754,8 +832,24 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
 .main-home-homeHeaderBackground {
   display: none !important;
 }
+/* hashed: home header artwork-color gradient (dwp-home-header) and its
+   ads-container twin — update if the colored band returns on Home */
+.h1AjDPMDbQn9UTUl6owY,
+.FBhDTxAzWggCUgjJluMU {
+  display: none !important;
+}
 .main-home-filterChipsSection {
   --background-base: transparent !important;
+}
+/* Sticky home chip row: Spotify paints its backdrop with the artwork color
+   via an inline --background-base (plus a dim ::after). Keep it flat on the
+   page color. Old .main-home-* names no longer map in the dwp-home-chips-row
+   chunk, so anchor on the chips inside it. */
+div:has(> .contentSpacing [data-encore-id="chip"]) > div[style*="--background-base"] {
+  --background-base: var(--spice-main) !important;
+}
+div:has(> .contentSpacing [data-encore-id="chip"]) > div[style*="--background-base"]::after {
+  display: none !important;
 }
 
 /* ── Playlist / Album Action Bar ───────────────── */
@@ -770,6 +864,14 @@ button[aria-checked="true"][aria-label*="Add to Liked"] {
 }
 
 .main-entityHeader-backgroundColor {
+  display: none !important;
+}
+
+/* hashed: 1.3.6 entity header artwork-color fill (inline background-color)
+   and the action-bar gradient under it — on light the header text is
+   near-black, so the colored block left usernames unreadable */
+.N6W22Ky7W6I93tr3vrqE,
+.T2XRKvkWneSSMSOCEo40 {
   display: none !important;
 }
 
@@ -796,16 +898,102 @@ html {
   --encore-elevated-surface-shadow: none !important;
 }
 
-/* hashed: Your Library panel wrapper — removes default elevation shadow */
-.HFowbNOgNPgtZSE4 {
-  box-shadow: none !important;
-}
-/* hashed: Your Library sticky list header scroll shadow */
-.pH4ZUdfvwTB_sRS_.ubsAl0Z3N0XZgmhy {
-  box-shadow: none !important;
+/* Encore color sets that Spicetify's replace_colors leaves hardcoded in
+   1.3.6. The bright-accent set still carries Spotify green on its
+   highlight/press states (D10 retires green everywhere). */
+.encore-dark-theme .encore-bright-accent-set {
+  --background-highlight: var(--spice-button-active, #8b5cf6) !important;
+  --background-press: var(--spice-button, #7c3aed) !important;
+  --background-elevated-base: var(--spice-button-active, #8b5cf6) !important;
+  --background-elevated-highlight: var(--spice-button-active, #8b5cf6) !important;
+  --background-elevated-press: var(--spice-button, #7c3aed) !important;
+  --decorative-subdued: var(--spice-button, #7c3aed) !important;
 }
 
-/* hashed: update if filter chips area changes — hides unknown overlay near home filter chips */
-span.SrfZ87xJMiJ7OYEB4Ziz {
-  display: none !important;
+/* Light scheme: Spotify always renders .encore-dark-theme (on <html> itself),
+   and a few of its base tokens stay hardcoded near-black — the topbar search
+   pill and its dropdown go #2a2a2a on hover/focus, dividers #292929. */
+html[data-scheme="light"],
+html[data-scheme="light"] .encore-base-set {
+  --background-press: var(--spice-pressed, #f0f0f0) !important;
+  --background-elevated-highlight: var(--spice-highlight, #f5f5f5) !important;
+  --background-elevated-press: var(--spice-pressed, #f0f0f0) !important;
+  --decorative-subdued: var(--hairline) !important;
+}
+html[data-scheme="light"] .encore-muted-accent-set {
+  --background-highlight: var(--spice-highlight, #f5f5f5) !important;
+  --background-press: var(--spice-pressed, #f0f0f0) !important;
+  --background-elevated-base: var(--spice-highlight, #f5f5f5) !important;
+  --background-elevated-press: var(--spice-pressed, #f0f0f0) !important;
+  --text-subdued: var(--ui-subtext) !important;
+}
+
+/* Encore's over-media set sits on a translucent black scrim (54%) over
+   artwork/video, but inherits --text-base from the scheme — near-black on
+   light, so "Switch to video" and friends vanish. Media is always dark. */
+html .encore-over-media-set {
+  --text-base: #ffffff !important;
+  --text-subdued: rgba(255, 255, 255, 0.7) !important;
+  --essential-base: #ffffff !important;
+  --essential-subdued: rgba(255, 255, 255, 0.7) !important;
+  color: #ffffff;
+}
+
+/* Carousel edge fades default to rgba(18,18,18,.7) on Home, which reads as a
+   heavy dark shadow on the light scheme; fade into the page instead. */
+[data-shelf="carousel"] {
+  --carousel-start-chevron-gradient: var(--spice-main) !important;
+  --carousel-end-chevron-gradient: var(--spice-main) !important;
+}
+
+/* Cinema/full-screen lyrics: Spotify sets an artwork-derived gradient via
+   inline --cinema-mode-bg-color-* vars; keep the ground flat. */
+[style*="--cinema-mode-bg-color-from"] {
+  --cinema-mode-bg-color-from: var(--spice-main) !important;
+  --cinema-mode-bg-color-to: var(--spice-main) !important;
+}
+/* hashed: cinema frame and its rounded inner panel — both draw a black
+   panel-gap outline; the inner one shows as black wedges at the corners */
+.BKBhMtk7_HSsKiFLJtC_,
+.xT1RZwPYcz7B6Ce7d5_5 {
+  outline-color: var(--spice-main) !important;
+}
+/* Light scheme NPV canvas: Spotify's three scrims end in solid
+   oklch(18%) so dark-theme white text reads over the video. On light the
+   text is near-black, so wash the canvas toward the page color instead.
+   [data-npv-root]/[data-canvas-surface] are Spotify's own hooks; the scrim
+   classes are hashed (CanvasOverlay: top, bottom, full). */
+html[data-scheme="light"] [data-canvas-surface] .D4bJrBQIY9ocvrkrulYd {
+  background: linear-gradient(color-mix(in srgb, var(--spice-main) 85%, transparent) 0%, transparent 30%) !important;
+}
+html[data-scheme="light"] [data-canvas-surface] .u9_qGyFmqLCZMiiNDyUF {
+  background: linear-gradient(to bottom,
+    transparent 0% var(--npv-canvas-bottom-scrim-clear-end),
+    color-mix(in srgb, var(--spice-main) 80%, transparent) var(--npv-canvas-bottom-scrim-mid-stop),
+    var(--spice-main) var(--npv-canvas-bottom-scrim-solid-stop)) !important;
+}
+html[data-scheme="light"] [data-canvas-surface] .FFQJwuDGRImvqvZRrRZP {
+  background: linear-gradient(
+    color-mix(in srgb, var(--spice-main) 45%, transparent) 0%,
+    color-mix(in srgb, var(--spice-main) 30%, transparent) 30% 70%,
+    var(--spice-main) 95%) !important;
+}
+
+/* Dark-theme drop shadows Spotify hardcodes in black. Spec §4.3 keeps
+   lists and sticky headers flat; on the light scheme these read as smudges.
+   hashed: Your Library sticky header, NPV sticky header (also animated in
+   via keyframes — !important outranks the animation), library row artwork
+   (0 4px 60px, stacks into a haze along the sidebar edge). */
+.qdBsKrqtlUFVKYdSs4yQ,
+.HPlSLSUXsn_u97TzPzWy,
+.FrzNGNchJMrcjyiyhO1S,
+.sVhXl95YZkkta3Jnjigr .QptzFzK9BPyRaxUswEDy,
+#Desktop_LeftSidebar_Id .ZQYP06Jt0JvCzAHgMZDw,
+.view-homeShortcutsGrid-imageWrapper {
+  box-shadow: none !important;
+}
+/* hashed: entity header artwork (playlist/album cover) — same 0 4px 60px
+   black shadow; cards are Lift per spec §4.3 */
+.ZQYP06Jt0JvCzAHgMZDw {
+  box-shadow: var(--shadow-lift) !important;
 }
