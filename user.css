@@ -853,10 +853,26 @@ div:has(> .contentSpacing [data-encore-id="chip"]) > div[style*="--background-ba
 }
 
 /* ── Playlist / Album Action Bar ───────────────── */
+/* Spotify fades this in on scroll (inline opacity) tinted with the artwork
+   color, then dims it with a 60% black overlay. Keep the fade but paint it
+   the flat page color so rows don't show through the sticky header. */
 .main-topBar-background {
-  opacity: 0 !important;
-  --background-base: transparent !important;
-  background: transparent !important;
+  --background-base: var(--spice-main) !important;
+  background: var(--spice-main) !important;
+}
+.main-topBar-background::after {
+  display: none !important;
+}
+.main-topBar-overlay {
+  background-color: transparent !important;
+}
+
+/* hashed: stuck state of the tracklist column header — Spotify paints it
+   --background-highlight (grey) with a player-colored top edge */
+.U5EKmWxF_AHcuhhqWTN8.main-trackList-trackListHeader {
+  background: var(--spice-main) !important;
+  border-bottom-color: var(--hairline) !important;
+  box-shadow: none !important;
 }
 
 .playlist-playlist-actionBarBackground-background {
