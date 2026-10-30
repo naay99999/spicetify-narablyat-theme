@@ -1,5 +1,5 @@
 {
-  "name": "narablyat",
+  "name": "tamjai",
   "description": "i's m theme",
   "readme": "README.md",
   "usercss": "user.css",
@@ -7,7 +7,8 @@
   "include": ["theme.js"],
   "authors": [
     {
-      "name": "narablyat"
+      "name": "naay99999",
+      "url": "https://github.com/naay99999"
     }
   ]
 }

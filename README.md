@@ -1,4 +1,4 @@
-# narablyat Theme
+# tamjai (ตามใจ)
 
 A Spotify theme for Spicetify with a Clean Pop design — flat platinum surfaces, rounded corners, and a soft violet gradient accent with gentle glows at a few focal points. Ships two color schemes: `suudLorLight` (soft platinum) and `suudLorDark` (near-black).
 
@@ -19,7 +19,7 @@ You need Spotify installed from [spotify.com](https://www.spotify.com/download/)
 
 ### With an AI agent
 
-Clone the repo anywhere, open it in an AI coding agent — [Claude Code](https://claude.com/claude-code), Codex, or any agent that reads `.agents/skills/` or `AGENTS.md` — and ask it to install Spicetify and apply the theme. The agent follows the `narablyat-theme` skill (`.claude/skills/` and `.agents/skills/` hold the same copy): it checks what's already installed, asks before installing anything, symlinks the repo into Spicetify's Themes folder, and applies the theme.
+Clone the repo anywhere, open it in an AI coding agent — [Claude Code](https://claude.com/claude-code), Codex, or any agent that reads `.agents/skills/` or `AGENTS.md` — and ask it to install Spicetify and apply the theme. The agent follows the `tamjai-theme` skill (`.claude/skills/` and `.agents/skills/` hold the same copy): it checks what's already installed, asks before installing anything, symlinks the repo into Spicetify's Themes folder, and applies the theme.
 
 ### Manually
 
@@ -27,13 +27,13 @@ Clone the repo anywhere, open it in an AI coding agent — [Claude Code](https:/
 
 2. Clone this theme into your Spicetify Themes folder:
    ```bash
-   git clone https://github.com/naay99999/spicetify-narablyat-theme.git "$(spicetify path userdata)/Themes/narablyat"
+   git clone https://github.com/naay99999/spicetify-tamjai-theme.git "$(spicetify path userdata)/Themes/tamjai"
    ```
-   On Windows the folder is `%APPDATA%\spicetify\Themes\narablyat`.
+   On Windows the folder is `%APPDATA%\spicetify\Themes\tamjai`.
 
 3. Turn it on:
    ```bash
-   spicetify config current_theme narablyat
+   spicetify config current_theme tamjai
    spicetify config color_scheme suudLorDark
    spicetify config inject_theme_js 1
    spicetify apply

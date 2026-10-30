@@ -11,8 +11,8 @@ This repository is a Spicetify theme with no build system. Core files live at th
 - `docs/design-spec.md` is the source of truth for the Clean Pop visual system (tokens, shadow scale, pop points, state matrix, decision log). Read it before changing UI behavior.
 - `docs/ui-fix-guidelines.md` holds historical XPUI research. Its source-file notes are still useful, but its selector-stability list predates Spotify 1.3.6.
 - `docs/screenshots/` holds the README screenshots.
-- `.agents/skills/narablyat-theme/SKILL.md` is the step-by-step workflow for installing Spicetify, installing and applying this theme, and the edit → apply → verify loop. Per-OS install details are in `references/install.md` next to it. Follow it whenever a user asks to set up, apply, or modify the theme, even if your agent doesn't load skills automatically.
-- `.claude/skills/narablyat-theme/` is an identical copy of that skill for Claude Code. When you edit the skill, update both copies in the same commit.
+- `.agents/skills/tamjai-theme/SKILL.md` is the step-by-step workflow for installing Spicetify, installing and applying this theme, and the edit → apply → verify loop. Per-OS install details are in `references/install.md` next to it. Follow it whenever a user asks to set up, apply, or modify the theme, even if your agent doesn't load skills automatically.
+- `.claude/skills/tamjai-theme/` is an identical copy of that skill for Claude Code. When you edit the skill, update both copies in the same commit.
 
 There is no dedicated test directory. Validation is manual through Spotify and Spicetify.
 
