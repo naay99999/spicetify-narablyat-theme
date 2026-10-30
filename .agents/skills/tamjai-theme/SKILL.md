@@ -1,11 +1,11 @@
 ---
-name: narablyat-theme
-description: Install Spicetify and the narablyat theme, and modify the theme (user.css, theme.js, color.ini) with a safe edit → apply → verify loop. Use when the user wants to set up Spicetify, install/enable/switch this theme or its color schemes, fix theme breakage after a Spotify update, or change how any part of Spotify looks under this theme.
+name: tamjai-theme
+description: Install Spicetify and the tamjai theme, and modify the theme (user.css, theme.js, color.ini) with a safe edit → apply → verify loop. Use when the user wants to set up Spicetify, install/enable/switch this theme or its color schemes, fix theme breakage after a Spotify update, or change how any part of Spotify looks under this theme.
 ---
 
-# narablyat theme: install & modify
+# tamjai theme: install & modify
 
-The repo is the theme folder itself. There is no build step: Spicetify reads `user.css`, `theme.js` and `color.ini` directly from `<userdata>/Themes/narablyat`.
+The repo is the theme folder itself. There is no build step: Spicetify reads `user.css`, `theme.js` and `color.ini` directly from `<userdata>/Themes/tamjai`.
 
 Before changing anything visual, read `CLAUDE.md` (architecture, selectors, conventions) and `docs/design-spec.md` (canonical tokens and rules).
 
@@ -41,30 +41,30 @@ spicetify backup apply
 
 ## 2. Install the theme
 
-The folder name must be `narablyat`, because `current_theme` matches the folder name.
+The folder name must be `tamjai`, because `current_theme` matches the folder name.
 
 **For development (recommended, if the repo is already checked out):** symlink the checkout so edits apply without copying.
 
 ```bash
-ln -s "$(pwd)" "$(spicetify path userdata)/Themes/narablyat"          # macOS/Linux, run from repo root
+ln -s "$(pwd)" "$(spicetify path userdata)/Themes/tamjai"          # macOS/Linux, run from repo root
 ```
 ```powershell
 # Windows: a junction needs no admin rights
-cmd /c mklink /J "$env:APPDATA\spicetify\Themes\narablyat" "$PWD"
+cmd /c mklink /J "$env:APPDATA\spicetify\Themes\tamjai" "$PWD"
 ```
 
 **For using the theme only:** clone straight into the Themes folder.
 
 ```bash
-git clone https://github.com/naay99999/spicetify-narablyat-theme.git "$(spicetify path userdata)/Themes/narablyat"
+git clone https://github.com/naay99999/spicetify-tamjai-theme.git "$(spicetify path userdata)/Themes/tamjai"
 ```
 
-Look at the target first. If `Themes/narablyat` already exists, check whether it is already a link to this repo before replacing anything.
+Look at the target first. If `Themes/tamjai` already exists, check whether it is already a link to this repo before replacing anything.
 
 Enable it:
 
 ```bash
-spicetify config current_theme narablyat color_scheme suudLorDark
+spicetify config current_theme tamjai color_scheme suudLorDark
 spicetify config inject_css 1 replace_colors 1 inject_theme_js 1   # theme.js needs inject_theme_js
 spicetify apply
 ```

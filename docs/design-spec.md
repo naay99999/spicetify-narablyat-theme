@@ -1,4 +1,4 @@
-# narablyat Design System Spec
+# tamjai Design System Spec
 
 **Status:** Accepted — source of truth for the 2026-07 "Clean Pop" redesign
 **Date:** 2026-07-16 (supersedes the 2026-07-12 Liquid Glass spec)

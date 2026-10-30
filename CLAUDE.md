@@ -4,11 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What This Is
 
-A Spicetify theme for Spotify called **narablyat**, built around a "Clean Pop" aesthetic: flat platinum surfaces with a soft violet gradient accent and gentle lavender glows at a few focal points. There is no build system — changes are applied directly via the Spicetify CLI.
+A Spicetify theme for Spotify called **tamjai**, built around a "Clean Pop" aesthetic: flat platinum surfaces with a soft violet gradient accent and gentle lavender glows at a few focal points. There is no build system — changes are applied directly via the Spicetify CLI.
 
 ## Applying Changes
 
-For installing Spicetify, installing the theme on a new machine, or the full edit → apply → verify loop, use the `narablyat-theme` skill (`.claude/skills/narablyat-theme/SKILL.md`).
+For installing Spicetify, installing the theme on a new machine, or the full edit → apply → verify loop, use the `tamjai-theme` skill (`.claude/skills/tamjai-theme/SKILL.md`). The same skill lives in `.agents/skills/tamjai-theme/` for other agents. Keep the two copies identical, and edit both in the same commit.
 
 After editing any file, apply to Spotify:
 
