@@ -8,6 +8,8 @@ A Spicetify theme for Spotify called **narablyat**, built around a "Clean Pop" a
 
 ## Applying Changes
 
+For installing Spicetify, installing the theme on a new machine, or the full edit → apply → verify loop, use the `narablyat-theme` skill (`.claude/skills/narablyat-theme/SKILL.md`).
+
 After editing any file, apply to Spotify:
 
 ```bash
@@ -40,19 +42,22 @@ Spotify's XPUI source is bundled locally and can be read directly to find select
 
 Key files: `xpui-snapshot.css` (root layout, sidebars, player bar, Encore base styles), `dwp-now-playing-bar.css` (player bar controls, progress, volume), `xpui-modules.js` (lyrics component implementation — `xpui-routes-lyrics.js` is only a thin wrapper).
 
-Known-stable root selectors: `.Root__nav-bar`, `.Root__right-sidebar`, `.Root__main-view`, and the `.lyrics-lyrics-*` classes. The now-playing bar dropped its `.Root__now-playing-bar` class in a recent Spotify build — target it via `[data-testid="now-playing-bar"]` instead. Its internal progress/volume bars similarly lost the `.playback-bar`/`.volume-bar` classes; use `[data-testid="playback-progressbar"]` and `[data-testid="volume-bar"]` as ancestors.
+The theme currently targets **Spotify 1.3.6** (Spicetify 2.46.4). That build dropped most legacy class hooks:
+- The `.Root__*` classes are gone (`.Root__nav-bar`, `.Root__right-sidebar`, `.Root__now-playing-bar`, …). Use `#main-view`, `[data-testid="right-sidebar"]`, and `[data-testid="now-playing-bar"]` instead. The old `.Root__*` rules stay in `user.css` only as fallbacks for older builds.
+- The progress/volume bars lost `.playback-bar`/`.volume-bar`. Use `[data-testid="playback-progressbar"]` and `[data-testid="volume-bar"]` as ancestors.
+- Lyrics classes are hashed. The container is matched by its inline vars (`[style*="--lyrics-color-active"]`), and the hashed line classes are listed in the Lyrics Route comment in `user.css`. The `.lyrics-lyrics-*` selectors stay only as fallbacks.
+- Several areas only have hashed classes, for example the right sidebar grid item, the home/entity header artwork-color fills, the stuck tracklist column header, and the cinema frame, canvas overlay, and sticky headers in QUARANTINE. Run `grep -n hashed user.css` to list them all. After a Spotify update, check these first.
 
-See `docs/ui-fix-guidelines.md` for detailed selector research and per-area fix guidance.
+`docs/ui-fix-guidelines.md` is historical research from before 1.3.6. Its XPUI file notes are still useful, but its "stable selector" list is out of date.
 
 ## Architecture
 
-**`user.css`** — All visual styling. Structured in sections (spec §10):
-- CSS custom properties at `:root` (accent ramp, gradient/glow tokens, surfaces, shadow scale, radii, transitions, search variables)
-- Topbar search (`spice-glass-topbar` — legacy class name) — flat pill with accent focus ring
-- Modal search dialog (selected via `:has([data-testid="search-modal-input"])`) — solid card with soft float shadow
-- Progress/volume bars — gradient playback fill, solid volume, rounded rails
-- Now-playing bar — floating solid card with a 1px gradient top hairline and wide glow
-- Chips/tabs — flat at rest; selected state carries the gradient + glow
+**`user.css`** — All visual styling, in the five sections of spec §10:
+1. **TOKENS** — a single `:root` block (accent ramp, gradient/glow tokens, surfaces, shadow scale, radii, transitions, search variables) plus dark-scheme overrides keyed on `html[data-scheme="dark"]`
+2. **BASE** — flat ground for the top container
+3. **LAYOUT ROOTS** — nav bar, right sidebar, the floating now-playing bar (solid card, 1px gradient top hairline, wide glow), and bottom clearance on `div:has(> #main-view)`
+4. **COMPONENTS** — topbar search (`spice-glass-topbar`, a legacy class name), the search modal (selected via `:has([data-testid="search-modal-input"])`), the search dropdown, player controls and the play button, progress/volume bars (gradient playback fill, solid volume, plus the dancing alien gif on the progress bar), cards, list rows, chips/tabs (flat at rest, gradient + glow when selected), context menus, lyrics, and headers (artwork-color fills on the home/entity headers, the sticky action bar, and the stuck column row are flattened to the surface color)
+5. **QUARANTINE** — overrides of Spotify-internal custom properties and Encore color sets, including the light-scheme fixes needed because Spotify always renders `.encore-dark-theme`
 
 **`theme.js`** — Two IIFEs that run at Spotify startup:
 1. **Class injector** — `MutationObserver` watches the DOM and adds `spice-glass-topbar` (legacy name from the glass era, kept for stability) to the topbar search. The search modal used to get `spice-glass-*` classes too, but React rewrites the dialog's `className` on re-render, so it is now styled purely via `:has()` in `user.css`.
@@ -64,7 +69,7 @@ See `docs/ui-fix-guidelines.md` for detailed selector research and per-area fix 
 
 ## Pop Elevation Pattern
 
-`docs/design-spec.md` is the design system source of truth for tokens, elevation, states, and color — treat numeric values there as canonical. `docs/redesign-plan.md` documents the glass → Clean Pop migration. This section only summarizes; if it ever conflicts with the spec, the spec wins.
+`docs/design-spec.md` is the design system source of truth for tokens, elevation, states, and color — treat numeric values there as canonical. This section only summarizes; if it ever conflicts with the spec, the spec wins.
 
 Every surface is opaque and quiet — solid fill, hairline border, no `backdrop-filter` anywhere (spec D9). Elevation is a three-level shadow scale (spec §4.3):
 - **Flat** — hairline border only: nav bar, right sidebar, resting chips, search pill at rest
@@ -89,7 +94,7 @@ Hover is removed everywhere except dense list rows (nav, library rows, context-m
 
 ## Targeting Spotify's Obfuscated Classes
 
-Spotify uses hashed class names (e.g. `Ckze8wMFNiDXk_f1IqjJ`) that can change after updates. Prefer `data-testid`, `aria-label`, `role`, and Spicetify's stable class patterns (`main-*`, `x-*`) over hashed names. When a hashed name is unavoidable, note it in a comment.
+Spotify uses hashed class names (e.g. `Ckze8wMFNiDXk_f1IqjJ`) that can change after updates. Prefer IDs (`#main-view`), `data-testid`, `aria-label`, `role`, inline-style attribute matches, and Spicetify's stable class patterns (`main-*`, `x-*`) over hashed names. If you can't avoid a hashed name, put a `/* hashed: <what it targets> — update if … */` comment above the rule, so a grep for `hashed:` lists everything that needs rechecking after a Spotify update.
 
 ## Manual Testing Checklist
 
@@ -101,8 +106,9 @@ After `spicetify apply`, verify in both `suudLorLight` and `suudLorDark`:
 - Play button — gradient fill with glow underneath
 - Chips/filter tabs — flat at rest; selected shows gradient + white text + glow
 - Sidebar and cards — flat/lift shadows only, border radius
+- Home, playlist, and album headers — no artwork-color fill; the sticky action bar and the stuck tracklist column row stay flat while scrolling
 - Lyrics route — flat opaque background, active line in text color (white on dark) with a text-shadow glow that follows the line length, lyrics readable
 
 ## Commit Style
 
-Conventional Commits with component scopes: `fix(glass): ...`, `feat(css): ...`, `refactor(theme): ...`, `docs(readme): ...`. Subjects are imperative.
+Conventional Commits with component scopes: `fix(css): ...`, `feat(css): ...`, `fix(theme): ...`, `refactor(theme): ...`, `docs(readme): ...`. Subjects are imperative. The `glass` scope belongs to the retired glass era; don't use it for new commits.
