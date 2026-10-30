@@ -19,7 +19,7 @@ You need Spotify installed from [spotify.com](https://www.spotify.com/download/)
 
 ### With an AI agent
 
-Clone the repo anywhere, open it in [Claude Code](https://claude.com/claude-code) (or another agent that reads `AGENTS.md`), and ask it to install Spicetify and apply the theme. The agent follows `.claude/skills/narablyat-theme/SKILL.md`: it checks what's already installed, asks before installing anything, symlinks the repo into Spicetify's Themes folder, and applies the theme.
+Clone the repo anywhere, open it in an AI coding agent — [Claude Code](https://claude.com/claude-code), Codex, or any agent that reads `.agents/skills/` or `AGENTS.md` — and ask it to install Spicetify and apply the theme. The agent follows the `narablyat-theme` skill (`.claude/skills/` and `.agents/skills/` hold the same copy): it checks what's already installed, asks before installing anything, symlinks the repo into Spicetify's Themes folder, and applies the theme.
 
 ### Manually
 

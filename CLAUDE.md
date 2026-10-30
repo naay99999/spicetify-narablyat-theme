@@ -8,7 +8,7 @@ A Spicetify theme for Spotify called **narablyat**, built around a "Clean Pop" a
 
 ## Applying Changes
 
-For installing Spicetify, installing the theme on a new machine, or the full edit → apply → verify loop, use the `narablyat-theme` skill (`.claude/skills/narablyat-theme/SKILL.md`).
+For installing Spicetify, installing the theme on a new machine, or the full edit → apply → verify loop, use the `narablyat-theme` skill (`.claude/skills/narablyat-theme/SKILL.md`). The same skill lives in `.agents/skills/narablyat-theme/` for other agents. Keep the two copies identical, and edit both in the same commit.
 
 After editing any file, apply to Spotify:
 
