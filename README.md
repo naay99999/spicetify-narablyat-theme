@@ -15,29 +15,38 @@ Home with the Now Playing view, a playlist page, lyrics, and the Cmd+K search mo
 
 ## Install
 
-You need [Spicetify](https://spicetify.app/) installed first.
+You need Spotify installed from [spotify.com](https://www.spotify.com/download/), opened and logged in at least once.
 
-1. Clone this theme into your Spicetify themes folder:
+### With an AI agent
+
+Clone the repo anywhere, open it in [Claude Code](https://claude.com/claude-code) (or another agent that reads `AGENTS.md`), and ask it to install Spicetify and apply the theme. The agent follows `.claude/skills/narablyat-theme/SKILL.md`: it checks what's already installed, asks before installing anything, symlinks the repo into Spicetify's Themes folder, and applies the theme.
+
+### Manually
+
+1. Install [Spicetify](https://spicetify.app/docs/getting-started), then run `spicetify backup apply` once.
+
+2. Clone this theme into your Spicetify Themes folder:
    ```bash
-   cd ~/.config/spicetify/Themes
-   git clone <repository-url> narablyat
+   git clone https://github.com/naay99999/spicetify-narablyat-theme.git "$(spicetify path userdata)/Themes/narablyat"
    ```
+   On Windows the folder is `%APPDATA%\spicetify\Themes\narablyat`.
 
-2. Turn it on:
+3. Turn it on:
    ```bash
    spicetify config current_theme narablyat
    spicetify config color_scheme suudLorDark
+   spicetify config inject_theme_js 1
    spicetify apply
    ```
 
-3. Open Spotify — the theme loads automatically.
+4. Open Spotify — the theme loads automatically.
 
 ## Use
 
 Switch color scheme:
 ```bash
-spicetify config color_scheme suudLorLight && spicetify apply   # frost white
-spicetify config color_scheme suudLorDark && spicetify apply    # dark neutral
+spicetify config color_scheme suudLorLight && spicetify apply   # soft platinum
+spicetify config color_scheme suudLorDark && spicetify apply    # near-black
 ```
 
 After editing `user.css`, `theme.js`, or `color.ini`:
