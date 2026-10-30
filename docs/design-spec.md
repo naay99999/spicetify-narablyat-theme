@@ -4,8 +4,6 @@
 **Date:** 2026-07-16 (supersedes the 2026-07-12 Liquid Glass spec)
 **Owner docs:** This file defines the design system. `README.md`, `CLAUDE.md`, and `AGENTS.md` must *reference* this file instead of restating numbers. If a value here changes, it changes here first.
 
-Companions: [`redesign-plan.md`](./redesign-plan.md) — the glass → Clean Pop migration plan. [`refactor-plan.md`](./refactor-plan.md) — historical (glass era).
-
 ---
 
 ## 1. Design Principles
